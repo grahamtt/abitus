@@ -167,6 +167,8 @@ Abitus embraces these principles:
 - [ ] AI-powered quest suggestions
 - [ ] Habit streak tracking
 - [ ] Integration with health apps
+- [ ] Journal feature integrated with quests (e.g. gratitude entries, reflections)
+- [ ] App integrations via Zapier or direct APIs (Duolingo, fitness apps, etc.) for auto-completing quests
 
 ## 🤝 Contributing
 
