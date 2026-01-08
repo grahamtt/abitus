@@ -1,0 +1,357 @@
+{
+  "daily_quests": {
+    "intellect": [
+      {
+        "title": "The Scholar's Path",
+        "description": "Read for 20 minutes",
+        "icon": "📖",
+        "duration_minutes": 20,
+        "xp_reward": 15,
+        "difficulty": 1
+      },
+      {
+        "title": "Mind Sharpener",
+        "description": "Complete a puzzle or brain game",
+        "icon": "🧩",
+        "duration_minutes": 10,
+        "xp_reward": 10,
+        "difficulty": 1
+      },
+      {
+        "title": "Knowledge Seeker",
+        "description": "Watch an educational video",
+        "icon": "🎬",
+        "duration_minutes": 30,
+        "xp_reward": 20,
+        "difficulty": 2
+      },
+      {
+        "title": "Language Learner",
+        "description": "Practice a new language for 15 minutes",
+        "icon": "🗣️",
+        "duration_minutes": 15,
+        "xp_reward": 18,
+        "difficulty": 2
+      },
+      {
+        "title": "Deep Dive",
+        "description": "Study a complex topic for 45 minutes",
+        "icon": "📚",
+        "duration_minutes": 45,
+        "xp_reward": 35,
+        "difficulty": 3
+      }
+    ],
+    "vitality": [
+      {
+        "title": "Morning Stretch",
+        "description": "Do a 5-minute stretch routine",
+        "icon": "🤸",
+        "duration_minutes": 5,
+        "xp_reward": 8,
+        "difficulty": 1
+      },
+      {
+        "title": "Hydration Quest",
+        "description": "Drink 8 glasses of water today",
+        "icon": "💧",
+        "duration_minutes": 5,
+        "xp_reward": 10,
+        "difficulty": 1
+      },
+      {
+        "title": "Iron Body Initiation",
+        "description": "Complete a 15-minute workout",
+        "icon": "💪",
+        "duration_minutes": 15,
+        "xp_reward": 20,
+        "difficulty": 2
+      },
+      {
+        "title": "Healthy Choices",
+        "description": "Prepare a nutritious meal from scratch",
+        "icon": "🥗",
+        "duration_minutes": 30,
+        "xp_reward": 22,
+        "difficulty": 2
+      },
+      {
+        "title": "Warrior's Training",
+        "description": "Complete a 30-minute intense workout",
+        "icon": "🏋️",
+        "duration_minutes": 30,
+        "xp_reward": 35,
+        "difficulty": 3
+      }
+    ],
+    "spirit": [
+      {
+        "title": "Moment of Peace",
+        "description": "Practice 5 minutes of deep breathing",
+        "icon": "🌬️",
+        "duration_minutes": 5,
+        "xp_reward": 8,
+        "difficulty": 1
+      },
+      {
+        "title": "The Gratitude Scroll",
+        "description": "Write 3 things you're grateful for",
+        "icon": "🙏",
+        "duration_minutes": 5,
+        "xp_reward": 10,
+        "difficulty": 1
+      },
+      {
+        "title": "Inner Calm",
+        "description": "Meditate for 10 minutes",
+        "icon": "🧘",
+        "duration_minutes": 10,
+        "xp_reward": 18,
+        "difficulty": 2
+      },
+      {
+        "title": "Nature's Embrace",
+        "description": "Spend 20 minutes in nature",
+        "icon": "🌳",
+        "duration_minutes": 20,
+        "xp_reward": 20,
+        "difficulty": 2
+      },
+      {
+        "title": "Deep Meditation",
+        "description": "Complete a 20-minute guided meditation",
+        "icon": "🕯️",
+        "duration_minutes": 20,
+        "xp_reward": 30,
+        "difficulty": 3
+      }
+    ],
+    "bonds": [
+      {
+        "title": "Quick Connect",
+        "description": "Send a thoughtful message to someone",
+        "icon": "💬",
+        "duration_minutes": 5,
+        "xp_reward": 10,
+        "difficulty": 1
+      },
+      {
+        "title": "Kindness Token",
+        "description": "Do a small act of kindness for someone",
+        "icon": "💝",
+        "duration_minutes": 5,
+        "xp_reward": 12,
+        "difficulty": 1
+      },
+      {
+        "title": "The Social Guild",
+        "description": "Reach out to a friend you haven't spoken to",
+        "icon": "📞",
+        "duration_minutes": 15,
+        "xp_reward": 20,
+        "difficulty": 2
+      },
+      {
+        "title": "Quality Time",
+        "description": "Spend 30 minutes of focused time with loved ones",
+        "icon": "👨‍👩‍👧",
+        "duration_minutes": 30,
+        "xp_reward": 25,
+        "difficulty": 2
+      },
+      {
+        "title": "Deep Connection",
+        "description": "Have a meaningful 1-hour conversation",
+        "icon": "🤝",
+        "duration_minutes": 60,
+        "xp_reward": 35,
+        "difficulty": 3
+      }
+    ],
+    "prosperity": [
+      {
+        "title": "Budget Check",
+        "description": "Review your expenses for 10 minutes",
+        "icon": "📊",
+        "duration_minutes": 10,
+        "xp_reward": 12,
+        "difficulty": 1
+      },
+      {
+        "title": "Career Reflection",
+        "description": "Write down one professional goal",
+        "icon": "🎯",
+        "duration_minutes": 5,
+        "xp_reward": 10,
+        "difficulty": 1
+      },
+      {
+        "title": "Network Builder",
+        "description": "Connect with a professional contact",
+        "icon": "🤝",
+        "duration_minutes": 15,
+        "xp_reward": 20,
+        "difficulty": 2
+      },
+      {
+        "title": "Learning Investment",
+        "description": "Take an online course lesson",
+        "icon": "🎓",
+        "duration_minutes": 30,
+        "xp_reward": 25,
+        "difficulty": 2
+      },
+      {
+        "title": "Financial Planning",
+        "description": "Create or update your budget plan",
+        "icon": "💰",
+        "duration_minutes": 45,
+        "xp_reward": 35,
+        "difficulty": 3
+      }
+    ],
+    "mastery": [
+      {
+        "title": "Daily Practice",
+        "description": "Practice a skill for 10 minutes",
+        "icon": "🎸",
+        "duration_minutes": 10,
+        "xp_reward": 12,
+        "difficulty": 1
+      },
+      {
+        "title": "Creative Spark",
+        "description": "Spend 10 minutes on a creative hobby",
+        "icon": "🎨",
+        "duration_minutes": 10,
+        "xp_reward": 12,
+        "difficulty": 1
+      },
+      {
+        "title": "The Artisan's Trial",
+        "description": "Spend 30 minutes on a creative hobby",
+        "icon": "🖌️",
+        "duration_minutes": 30,
+        "xp_reward": 22,
+        "difficulty": 2
+      },
+      {
+        "title": "Project Progress",
+        "description": "Work on a personal project for 30 minutes",
+        "icon": "🛠️",
+        "duration_minutes": 30,
+        "xp_reward": 25,
+        "difficulty": 2
+      },
+      {
+        "title": "Deep Work",
+        "description": "Focus on mastery practice for 1 hour",
+        "icon": "⚒️",
+        "duration_minutes": 60,
+        "xp_reward": 40,
+        "difficulty": 3
+      }
+    ]
+  },
+  "weekly_quests": [
+    {
+      "title": "Knowledge Marathon",
+      "description": "Read for a total of 2 hours this week",
+      "icon": "📚",
+      "stat": "intellect",
+      "xp_reward": 100,
+      "difficulty": 3
+    },
+    {
+      "title": "Fitness Journey",
+      "description": "Exercise 4 times this week",
+      "icon": "💪",
+      "stat": "vitality",
+      "xp_reward": 120,
+      "difficulty": 3
+    },
+    {
+      "title": "Inner Peace Week",
+      "description": "Meditate every day this week",
+      "icon": "🧘",
+      "stat": "spirit",
+      "xp_reward": 100,
+      "difficulty": 3
+    },
+    {
+      "title": "Social Butterfly",
+      "description": "Connect with 3 different friends this week",
+      "icon": "💝",
+      "stat": "bonds",
+      "xp_reward": 100,
+      "difficulty": 3
+    },
+    {
+      "title": "Career Focus",
+      "description": "Dedicate 3 hours to professional development",
+      "icon": "💰",
+      "stat": "prosperity",
+      "xp_reward": 110,
+      "difficulty": 3
+    },
+    {
+      "title": "Craft Master",
+      "description": "Practice your craft for 3 hours total",
+      "icon": "🎯",
+      "stat": "mastery",
+      "xp_reward": 100,
+      "difficulty": 3
+    }
+  ],
+  "epic_quests": [
+    {
+      "title": "The Scholar's Journey",
+      "description": "Read 5 books this month",
+      "icon": "📖",
+      "stat": "intellect",
+      "xp_reward": 500,
+      "difficulty": 4
+    },
+    {
+      "title": "Iron Will Challenge",
+      "description": "Complete a 30-day fitness challenge",
+      "icon": "🏆",
+      "stat": "vitality",
+      "xp_reward": 600,
+      "difficulty": 4
+    },
+    {
+      "title": "Meditation Master",
+      "description": "Meditate daily for 30 consecutive days",
+      "icon": "🕯️",
+      "stat": "spirit",
+      "xp_reward": 500,
+      "difficulty": 4
+    },
+    {
+      "title": "Social Champion",
+      "description": "Strengthen 10 relationships this month",
+      "icon": "👥",
+      "stat": "bonds",
+      "xp_reward": 500,
+      "difficulty": 4
+    },
+    {
+      "title": "Career Breakthrough",
+      "description": "Complete a major professional certification",
+      "icon": "🎓",
+      "stat": "prosperity",
+      "xp_reward": 800,
+      "difficulty": 5
+    },
+    {
+      "title": "Masterpiece",
+      "description": "Complete a significant personal project",
+      "icon": "✨",
+      "stat": "mastery",
+      "xp_reward": 700,
+      "difficulty": 5
+    }
+  ]
+}
+
