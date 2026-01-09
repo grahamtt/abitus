@@ -12,21 +12,21 @@ from playwright.sync_api import Page, expect
 
 
 @pytest.mark.smoke
-def test_interview_loads(page_with_app: Page):
+def test_interview_loads(fresh_app_page: Page):
     """Verify the interview screen loads for new users."""
     # The interview should show the first category introduction
     # Look for the "Begin" button which appears on category intro screens
-    begin_button = page_with_app.get_by_text("Begin")
+    begin_button = fresh_app_page.get_by_role("button", name="Begin")
     expect(begin_button).to_be_visible(timeout=10000)
 
 
 @pytest.mark.e2e
-def test_complete_interview_flow(page_with_app: Page):
+def test_complete_interview_flow(fresh_app_page: Page):
     """Test completing the full interview assessment."""
-    page = page_with_app
+    page = fresh_app_page
     
     # Start the first category
-    page.get_by_text("Begin").click()
+    page.get_by_role("button", name="Begin").click()
     
     # Answer questions by clicking continue/skip through them
     # The interview has multiple categories with multiple questions each
@@ -35,8 +35,8 @@ def test_complete_interview_flow(page_with_app: Page):
     
     while questions_answered < max_questions:
         # Check if we're on a category intro (has "Begin" button)
-        begin_button = page.get_by_text("Begin", exact=True)
-        if begin_button.is_visible():
+        begin_button = page.get_by_role("button", name="Begin")
+        if begin_button.count() > 0 and begin_button.is_visible():
             begin_button.click()
             page.wait_for_timeout(300)
             continue
@@ -78,12 +78,12 @@ def test_complete_interview_flow(page_with_app: Page):
 
 
 @pytest.mark.smoke
-def test_interview_navigation(page_with_app: Page):
+def test_interview_navigation(fresh_app_page: Page):
     """Test back navigation during interview."""
-    page = page_with_app
+    page = fresh_app_page
     
     # Start first category
-    page.get_by_text("Begin").click()
+    page.get_by_role("button", name="Begin").click()
     page.wait_for_timeout(500)
     
     # Answer a question (click Continue or Skip)

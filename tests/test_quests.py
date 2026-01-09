@@ -13,20 +13,21 @@ from playwright.sync_api import Page, expect
 
 
 @pytest.fixture
-def app_with_character(page_with_app: Page) -> Page:
+def app_with_character(fresh_app_page: Page) -> Page:
     """
     Fixture that completes the interview to get to the main app.
     
     This speeds up quest tests by handling onboarding setup.
+    Uses fresh_app_page to ensure a clean database.
     """
-    page = page_with_app
+    page = fresh_app_page
     
     # Fast-forward through interview
     max_iterations = 60
     for _ in range(max_iterations):
         # Check for category intro
-        begin_btn = page.get_by_text("Begin", exact=True)
-        if begin_btn.is_visible():
+        begin_btn = page.get_by_role("button", name="Begin")
+        if begin_btn.count() > 0 and begin_btn.is_visible():
             begin_btn.click()
             page.wait_for_timeout(200)
             continue

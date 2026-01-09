@@ -19,8 +19,12 @@ class StorageService:
     def __init__(self, db_path: Optional[str] = None):
         """Initialize storage with database path."""
         if db_path is None:
-            # Use app data directory
-            data_dir = Path.home() / ".abitus"
+            # Check for environment variable override (used for testing)
+            data_dir_env = os.environ.get("ABITUS_DATA_DIR")
+            if data_dir_env:
+                data_dir = Path(data_dir_env)
+            else:
+                data_dir = Path.home() / ".abitus"
             data_dir.mkdir(exist_ok=True)
             db_path = str(data_dir / "abitus.db")
         
