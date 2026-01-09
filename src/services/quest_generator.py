@@ -152,6 +152,10 @@ class QuestGenerator:
             expires_at=datetime.now() + timedelta(days=7),
             satisfied_by=satisfied_by,
             satisfaction_config=satisfaction_config,
+            progress_trackable=template.get("progress_trackable", False),
+            progress_target=template.get("progress_target", 0),
+            progress_current=0,
+            progress_unit=template.get("progress_unit", "units"),
         )
     
     def generate_epic_quest(self, character: Character) -> Optional[Quest]:
@@ -189,6 +193,10 @@ class QuestGenerator:
             expires_at=datetime.now() + timedelta(days=30),
             satisfied_by=satisfied_by,
             satisfaction_config=satisfaction_config,
+            progress_trackable=template.get("progress_trackable", False),
+            progress_target=template.get("progress_target", 0),
+            progress_current=0,
+            progress_unit=template.get("progress_unit", "units"),
         )
     
     def generate_random_encounter(self, character: Character) -> Quest:

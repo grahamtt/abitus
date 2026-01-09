@@ -15,6 +15,7 @@ class QuestCard(ft.Container):
         on_complete=None,
         on_abandon=None,
         on_write_entry=None,  # For journal-satisfiable quests
+        on_log_progress=None,  # For progress-trackable quests
         expanded: bool = False,
     ):
         self.quest = quest
@@ -22,6 +23,7 @@ class QuestCard(ft.Container):
         self._on_complete = on_complete
         self._on_abandon = on_abandon
         self._on_write_entry = on_write_entry
+        self._on_log_progress = on_log_progress
         self.expanded = expanded
         
         # Get stat color for theming
@@ -172,8 +174,68 @@ class QuestCard(ft.Container):
                     ],
                 ),
                 
+                # Progress bar (for trackable quests)
+                self._build_progress_bar() if quest.progress_trackable else ft.Container(),
+                
                 # Action buttons
                 self._build_actions(),
+            ],
+        )
+    
+    def _build_progress_bar(self) -> ft.Control:
+        """Build progress indicator for trackable quests."""
+        quest = self.quest
+        percentage = quest.progress_percentage
+        
+        return ft.Column(
+            spacing=4,
+            controls=[
+                ft.Row(
+                    alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                    controls=[
+                        ft.Text(
+                            "Progress",
+                            size=12,
+                            color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                        ),
+                        ft.Text(
+                            quest.progress_display,
+                            size=12,
+                            weight=ft.FontWeight.W_500,
+                            color=self.stat_def.color,
+                        ),
+                    ],
+                ),
+                ft.Container(
+                    content=ft.Stack(
+                        controls=[
+                            # Background track
+                            ft.Container(
+                                height=8,
+                                bgcolor=ft.Colors.with_opacity(0.15, self.stat_def.color),
+                                border_radius=4,
+                                expand=True,
+                            ),
+                            # Progress fill
+                            ft.Container(
+                                height=8,
+                                width=percentage * 2,  # Approximate scaling
+                                bgcolor=self.stat_def.color,
+                                border_radius=4,
+                                animate=ft.Animation(300, ft.AnimationCurve.EASE_OUT),
+                            ),
+                        ],
+                    ),
+                    clip_behavior=ft.ClipBehavior.ANTI_ALIAS,
+                    border_radius=4,
+                ),
+                # Percentage text
+                ft.Text(
+                    f"{percentage:.0f}% complete",
+                    size=11,
+                    color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                    text_align=ft.TextAlign.CENTER,
+                ),
             ],
         )
     
@@ -225,20 +287,39 @@ class QuestCard(ft.Container):
                     ),
                 )
             
-            buttons.append(
-                ft.FilledButton(
-                    content=ft.Row(
-                        spacing=6,
-                        controls=[
-                            ft.Icon(ft.Icons.CHECK, size=18),
-                            ft.Text("Complete", weight=ft.FontWeight.W_500),
-                        ],
+            # Add "Log Progress" button for progress-trackable quests
+            if quest.progress_trackable and self._on_log_progress:
+                buttons.append(
+                    ft.FilledButton(
+                        content=ft.Row(
+                            spacing=6,
+                            controls=[
+                                ft.Icon(ft.Icons.ADD_CIRCLE_OUTLINE, size=18),
+                                ft.Text("Log Progress", weight=ft.FontWeight.W_500),
+                            ],
+                        ),
+                        bgcolor=self.stat_def.color,
+                        color=ft.Colors.WHITE,
+                        on_click=self._on_log_progress,
                     ),
-                    bgcolor="#22c55e",
-                    color=ft.Colors.WHITE,
-                    on_click=self._on_complete,
-                ),
-            )
+                )
+            
+            # Only show Complete button if not progress-trackable OR progress is complete
+            if not quest.progress_trackable or quest.is_progress_complete:
+                buttons.append(
+                    ft.FilledButton(
+                        content=ft.Row(
+                            spacing=6,
+                            controls=[
+                                ft.Icon(ft.Icons.CHECK, size=18),
+                                ft.Text("Complete", weight=ft.FontWeight.W_500),
+                            ],
+                        ),
+                        bgcolor="#22c55e",
+                        color=ft.Colors.WHITE,
+                        on_click=self._on_complete,
+                    ),
+                )
             
             return ft.Row(
                 alignment=ft.MainAxisAlignment.END,

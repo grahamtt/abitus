@@ -22,6 +22,7 @@ class QuestsView(ft.Container):
         on_quest_abandon: Callable[[Quest], None],
         on_back: Callable[[], None],
         on_write_entry: Optional[Callable[[Quest], None]] = None,
+        on_log_progress: Optional[Callable[[Quest], None]] = None,
     ):
         self.active_quests = active_quests
         self.available_quests = available_quests
@@ -31,6 +32,7 @@ class QuestsView(ft.Container):
         self.on_quest_abandon = on_quest_abandon
         self.on_back = on_back
         self.on_write_entry = on_write_entry
+        self.on_log_progress = on_log_progress
         
         self.current_tab = 0
         
@@ -160,6 +162,7 @@ class QuestsView(ft.Container):
                     on_complete=lambda e, q=quest: self.on_quest_complete(q),
                     on_abandon=lambda e, q=quest: self.on_quest_abandon(q),
                     on_write_entry=lambda e, q=quest: self.on_write_entry(q) if self.on_write_entry else None,
+                    on_log_progress=lambda e, q=quest: self.on_log_progress(q) if self.on_log_progress else None,
                 )
                 for quest in self.active_quests
             ],

@@ -494,7 +494,10 @@
       "stat": "intellect",
       "xp_reward": 100,
       "difficulty": 3,
-      "subfacets": ["learning", "knowledge"]
+      "subfacets": ["learning", "knowledge"],
+      "progress_trackable": true,
+      "progress_target": 120,
+      "progress_unit": "minutes"
     },
     {
       "title": "The Warrior's Regimen",
@@ -503,7 +506,10 @@
       "stat": "vitality",
       "xp_reward": 120,
       "difficulty": 3,
-      "subfacets": ["exercise", "endurance"]
+      "subfacets": ["exercise", "endurance"],
+      "progress_trackable": true,
+      "progress_target": 4,
+      "progress_unit": "sessions"
     },
     {
       "title": "The Pilgrim's Journey",
@@ -512,7 +518,10 @@
       "stat": "spirit",
       "xp_reward": 100,
       "difficulty": 3,
-      "subfacets": ["mindfulness", "inner_peace"]
+      "subfacets": ["mindfulness", "inner_peace"],
+      "progress_trackable": true,
+      "progress_target": 7,
+      "progress_unit": "days"
     },
     {
       "title": "The Diplomat's Round",
@@ -521,7 +530,10 @@
       "stat": "bonds",
       "xp_reward": 100,
       "difficulty": 3,
-      "subfacets": ["friendship", "communication"]
+      "subfacets": ["friendship", "communication"],
+      "progress_trackable": true,
+      "progress_target": 3,
+      "progress_unit": "connections"
     },
     {
       "title": "The Merchant Prince's Vigil",
@@ -530,7 +542,10 @@
       "stat": "prosperity",
       "xp_reward": 110,
       "difficulty": 3,
-      "subfacets": ["career", "growth"]
+      "subfacets": ["career", "growth"],
+      "progress_trackable": true,
+      "progress_target": 180,
+      "progress_unit": "minutes"
     },
     {
       "title": "The Artisan's Dedication",
@@ -539,7 +554,10 @@
       "stat": "mastery",
       "xp_reward": 100,
       "difficulty": 3,
-      "subfacets": ["skills", "discipline"]
+      "subfacets": ["skills", "discipline"],
+      "progress_trackable": true,
+      "progress_target": 180,
+      "progress_unit": "minutes"
     },
     {
       "title": "The Sage's Curiosity",
@@ -548,7 +566,10 @@
       "stat": "intellect",
       "xp_reward": 90,
       "difficulty": 2,
-      "subfacets": ["curiosity", "learning"]
+      "subfacets": ["curiosity", "learning"],
+      "progress_trackable": true,
+      "progress_target": 3,
+      "progress_unit": "subjects"
     },
     {
       "title": "The Alchemist's Balance",
@@ -557,7 +578,10 @@
       "stat": "vitality",
       "xp_reward": 100,
       "difficulty": 3,
-      "subfacets": ["nutrition", "energy"]
+      "subfacets": ["nutrition", "energy"],
+      "progress_trackable": true,
+      "progress_target": 5,
+      "progress_unit": "meals"
     },
     {
       "title": "The Gratitude Codex",
@@ -604,7 +628,10 @@
       "stat": "intellect",
       "xp_reward": 500,
       "difficulty": 4,
-      "subfacets": ["learning", "knowledge", "curiosity"]
+      "subfacets": ["learning", "knowledge", "curiosity"],
+      "progress_trackable": true,
+      "progress_target": 5,
+      "progress_unit": "books"
     },
     {
       "title": "The Iron Will Challenge",
@@ -613,7 +640,10 @@
       "stat": "vitality",
       "xp_reward": 600,
       "difficulty": 4,
-      "subfacets": ["exercise", "endurance", "discipline"]
+      "subfacets": ["exercise", "endurance", "discipline"],
+      "progress_trackable": true,
+      "progress_target": 30,
+      "progress_unit": "days"
     },
     {
       "title": "The Enlightened Path",
@@ -622,7 +652,10 @@
       "stat": "spirit",
       "xp_reward": 500,
       "difficulty": 4,
-      "subfacets": ["mindfulness", "inner_peace", "resilience"]
+      "subfacets": ["mindfulness", "inner_peace", "resilience"],
+      "progress_trackable": true,
+      "progress_target": 30,
+      "progress_unit": "days"
     },
     {
       "title": "The Fellowship's Oath",
@@ -631,7 +664,10 @@
       "stat": "bonds",
       "xp_reward": 500,
       "difficulty": 4,
-      "subfacets": ["friendship", "family", "community"]
+      "subfacets": ["friendship", "family", "community"],
+      "progress_trackable": true,
+      "progress_target": 10,
+      "progress_unit": "bonds"
     },
     {
       "title": "The Royal Certification",
@@ -667,7 +703,10 @@
       "stat": "vitality",
       "xp_reward": 550,
       "difficulty": 4,
-      "subfacets": ["nutrition", "sleep", "energy"]
+      "subfacets": ["nutrition", "sleep", "energy"],
+      "progress_trackable": true,
+      "progress_target": 3,
+      "progress_unit": "habits"
     },
     {
       "title": "The Inner Dragon",

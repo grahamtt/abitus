@@ -191,6 +191,7 @@ class AbitusApp:
             on_view_all_quests=self.show_quests,
             on_view_character=self.show_character,
             on_write_entry=self.show_journal_for_quest,
+            on_log_progress=self.show_log_progress_dialog,
         )
         
         self.page.clean()
@@ -274,6 +275,7 @@ class AbitusApp:
             on_quest_abandon=self.abandon_quest,
             on_back=self.show_home,
             on_write_entry=self.show_journal_for_quest,
+            on_log_progress=self.show_log_progress_dialog,
         )
         
         self.page.clean()
@@ -435,6 +437,129 @@ class AbitusApp:
         quest.abandon()
         self.storage.save_quest(quest)
         self.refresh_current_view()
+    
+    def show_log_progress_dialog(self, quest: Quest):
+        """Show a dialog to log incremental progress for a quest."""
+        if not quest.progress_trackable:
+            return
+        
+        # Create text field for amount
+        amount_field = ft.TextField(
+            label=f"Add {quest.progress_unit}",
+            keyboard_type=ft.KeyboardType.NUMBER,
+            hint_text=f"e.g. 15",
+            autofocus=True,
+            expand=True,
+        )
+        
+        # Quick add buttons for common amounts
+        quick_amounts = [5, 10, 15, 30] if "minute" in quest.progress_unit.lower() else [1, 2, 5]
+        
+        def close_dialog(e=None):
+            if dialog in self.page.overlay:
+                dialog.open = False
+                self.page.overlay.remove(dialog)
+            self.page.update()
+        
+        def add_progress(amount: float):
+            was_complete = quest.is_progress_complete
+            target_reached = quest.add_progress(amount)
+            
+            # Save the updated quest
+            self.storage.save_quest(quest)
+            
+            close_dialog()
+            
+            # If target reached, show a notification
+            if target_reached:
+                self.page.snack_bar = ft.SnackBar(
+                    content=ft.Text(f"🎯 Target reached! You can now complete '{quest.title}'"),
+                    bgcolor="#22c55e",
+                )
+                self.page.snack_bar.open = True
+            else:
+                self.page.snack_bar = ft.SnackBar(
+                    content=ft.Text(f"📝 Progress logged: {quest.progress_display}"),
+                )
+                self.page.snack_bar.open = True
+            
+            # Refresh view
+            self.refresh_current_view()
+        
+        def log_custom_amount(e):
+            try:
+                amount = float(amount_field.value or 0)
+                if amount > 0:
+                    add_progress(amount)
+            except ValueError:
+                pass
+        
+        dialog = ft.AlertDialog(
+            modal=True,
+            open=True,
+            title=ft.Text(f"📝 Log Progress"),
+            content=ft.Column(
+                tight=True,
+                spacing=16,
+                controls=[
+                    ft.Text(
+                        quest.title,
+                        weight=ft.FontWeight.W_600,
+                    ),
+                    ft.Text(
+                        f"Current: {quest.progress_display}",
+                        color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                    ),
+                    # Progress bar
+                    ft.Container(
+                        content=ft.ProgressBar(
+                            value=quest.progress_percentage / 100,
+                            color="#22c55e",
+                            bgcolor=ft.Colors.with_opacity(0.2, ft.Colors.ON_SURFACE),
+                        ),
+                        height=8,
+                        border_radius=4,
+                    ),
+                    ft.Divider(),
+                    # Quick add buttons
+                    ft.Text(
+                        "Quick add:",
+                        size=12,
+                        color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                    ),
+                    ft.Row(
+                        spacing=8,
+                        wrap=True,
+                        controls=[
+                            ft.FilledTonalButton(
+                                text=f"+{amt}",
+                                on_click=lambda e, a=amt: add_progress(a),
+                            )
+                            for amt in quick_amounts
+                        ],
+                    ),
+                    ft.Divider(),
+                    # Custom amount
+                    ft.Text(
+                        "Or enter custom amount:",
+                        size=12,
+                        color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                    ),
+                    amount_field,
+                ],
+            ),
+            actions=[
+                ft.TextButton("Cancel", on_click=close_dialog),
+                ft.FilledButton(
+                    "Log Progress",
+                    on_click=log_custom_amount,
+                ),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+        )
+        
+        self.page.overlay.append(dialog)
+        self.page.update()
     
     def refresh_daily_quests(self):
         """Refresh daily quests if needed."""

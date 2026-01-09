@@ -102,6 +102,12 @@ class Quest:
     satisfied_by: SatisfactionType = SatisfactionType.MANUAL
     satisfaction_config: dict = field(default_factory=dict)  # e.g., {"min_words": 50}
     
+    # Incremental progress tracking
+    progress_trackable: bool = False
+    progress_target: float = 0  # Target amount to complete (e.g., 120 for 2 hours)
+    progress_current: float = 0  # Current progress
+    progress_unit: str = "minutes"  # Display unit (minutes, sessions, pages, etc.)
+    
     @property
     def is_expired(self) -> bool:
         """Check if quest has expired."""
@@ -194,6 +200,38 @@ class Quest:
         expected_type = JOURNAL_SATISFACTION_MAP.get(entry_type)
         return expected_type == self.satisfied_by
     
+    @property
+    def progress_percentage(self) -> float:
+        """Get completion percentage for trackable quests."""
+        if not self.progress_trackable or self.progress_target <= 0:
+            return 0
+        return min(100, (self.progress_current / self.progress_target) * 100)
+    
+    @property
+    def progress_display(self) -> str:
+        """Formatted progress display string."""
+        if not self.progress_trackable:
+            return ""
+        return f"{self.progress_current:.0f}/{self.progress_target:.0f} {self.progress_unit}"
+    
+    @property
+    def is_progress_complete(self) -> bool:
+        """Check if progress target has been reached."""
+        return self.progress_trackable and self.progress_current >= self.progress_target
+    
+    def add_progress(self, amount: float) -> bool:
+        """
+        Add progress to the quest.
+        Returns True if the target was reached with this update.
+        """
+        if not self.progress_trackable or self.status != QuestStatus.ACTIVE:
+            return False
+        
+        was_complete = self.is_progress_complete
+        self.progress_current = min(self.progress_target, self.progress_current + amount)
+        
+        return not was_complete and self.is_progress_complete
+    
     def accept(self) -> bool:
         """Accept the quest."""
         if not self.can_accept:
@@ -262,6 +300,10 @@ class Quest:
             "prerequisite_quest_id": self.prerequisite_quest_id,
             "satisfied_by": self.satisfied_by.value,
             "satisfaction_config": self.satisfaction_config,
+            "progress_trackable": self.progress_trackable,
+            "progress_target": self.progress_target,
+            "progress_current": self.progress_current,
+            "progress_unit": self.progress_unit,
         }
     
     @classmethod
@@ -310,5 +352,9 @@ class Quest:
             prerequisite_quest_id=data.get("prerequisite_quest_id"),
             satisfied_by=satisfied_by,
             satisfaction_config=data.get("satisfaction_config", {}),
+            progress_trackable=data.get("progress_trackable", False),
+            progress_target=data.get("progress_target", 0),
+            progress_current=data.get("progress_current", 0),
+            progress_unit=data.get("progress_unit", "minutes"),
         )
 
