@@ -6,7 +6,7 @@ from datetime import datetime
 from models.character import Character
 from models.quest import Quest
 from models.achievement import Achievement, AchievementType
-from models.stats import StatType
+from models.stats import StatType, SubFacetType, SUBFACET_TO_DIMENSION
 
 
 class ProgressionService:
@@ -23,11 +23,13 @@ class ProgressionService:
         Returns:
             dict with keys:
             - xp_gained: dict[StatType, int]
+            - subfacets_boosted: list[SubFacetType]
             - levels_gained: dict[StatType, int]
             - achievements_unlocked: list[Achievement]
         """
         results = {
             "xp_gained": {},
+            "subfacets_boosted": [],
             "levels_gained": {},
             "achievements_unlocked": [],
         }
@@ -38,9 +40,28 @@ class ProgressionService:
         # Apply XP to character
         for stat_type, xp in rewards.items():
             old_level = character.stats[stat_type].level
-            character.add_xp(stat_type, xp)
-            new_level = character.stats[stat_type].level
             
+            # Check if quest has target subfacets for this stat
+            target_subfacets = [
+                sf for sf in quest.target_subfacets 
+                if SUBFACET_TO_DIMENSION.get(sf) == stat_type
+            ]
+            
+            if target_subfacets:
+                # Distribute XP among target subfacets
+                xp_per_subfacet = xp // len(target_subfacets)
+                remainder = xp % len(target_subfacets)
+                
+                for i, subfacet in enumerate(target_subfacets):
+                    # First subfacet gets any remainder
+                    subfacet_xp = xp_per_subfacet + (remainder if i == 0 else 0)
+                    character.add_subfacet_xp(subfacet, subfacet_xp)
+                    results["subfacets_boosted"].append(subfacet)
+            else:
+                # No specific subfacets, distribute evenly across all subfacets
+                character.add_xp(stat_type, xp)
+            
+            new_level = character.stats[stat_type].level
             results["xp_gained"][stat_type] = xp
             
             if new_level > old_level:

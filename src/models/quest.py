@@ -6,7 +6,7 @@ from enum import Enum
 from typing import Optional
 import uuid
 
-from .stats import StatType
+from .stats import StatType, SubFacetType
 
 
 class QuestType(Enum):
@@ -45,6 +45,7 @@ class Quest:
     primary_stat: StatType = StatType.INTELLECT
     xp_reward: int = 10
     secondary_rewards: dict[StatType, int] = field(default_factory=dict)
+    target_subfacets: list[SubFacetType] = field(default_factory=list)  # Which subfacets get XP
     
     # Requirements
     duration_minutes: int = 15
@@ -161,6 +162,7 @@ class Quest:
             "primary_stat": self.primary_stat.value,
             "xp_reward": self.xp_reward,
             "secondary_rewards": {k.value: v for k, v in self.secondary_rewards.items()},
+            "target_subfacets": [sf.value for sf in self.target_subfacets],
             "duration_minutes": self.duration_minutes,
             "difficulty": self.difficulty,
             "created_at": self.created_at.isoformat(),
@@ -182,6 +184,14 @@ class Quest:
         for k, v in data.get("secondary_rewards", {}).items():
             secondary[StatType(k)] = v
         
+        # Parse target subfacets
+        subfacets = []
+        for sf_value in data.get("target_subfacets", []):
+            try:
+                subfacets.append(SubFacetType(sf_value))
+            except ValueError:
+                pass  # Skip invalid subfacet values
+        
         return cls(
             id=data.get("id", str(uuid.uuid4())),
             title=data.get("title", "Untitled Quest"),
@@ -192,6 +202,7 @@ class Quest:
             primary_stat=StatType(data.get("primary_stat", "intellect")),
             xp_reward=data.get("xp_reward", 10),
             secondary_rewards=secondary,
+            target_subfacets=subfacets,
             duration_minutes=data.get("duration_minutes", 15),
             difficulty=data.get("difficulty", 1),
             created_at=datetime.fromisoformat(data["created_at"]) if "created_at" in data else datetime.now(),

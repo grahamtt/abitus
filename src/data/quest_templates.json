@@ -2,356 +2,749 @@
   "daily_quests": {
     "intellect": [
       {
-        "title": "The Scholar's Path",
-        "description": "Read for 20 minutes",
+        "title": "The Scholar's Devotion",
+        "description": "Spend 20 minutes studying the ancient tomes (read a book)",
         "icon": "📖",
         "duration_minutes": 20,
         "xp_reward": 15,
-        "difficulty": 1
+        "difficulty": 1,
+        "subfacets": ["learning", "knowledge"]
       },
       {
-        "title": "Mind Sharpener",
-        "description": "Complete a puzzle or brain game",
+        "title": "Riddles of the Sphinx",
+        "description": "Solve puzzles to sharpen your wit (puzzle or brain game)",
         "icon": "🧩",
         "duration_minutes": 10,
         "xp_reward": 10,
-        "difficulty": 1
+        "difficulty": 1,
+        "subfacets": ["problem_solving", "curiosity"]
       },
       {
-        "title": "Knowledge Seeker",
-        "description": "Watch an educational video",
-        "icon": "🎬",
+        "title": "The Chronicler's Task",
+        "description": "Record your thoughts in a journal entry",
+        "icon": "📜",
+        "duration_minutes": 10,
+        "xp_reward": 12,
+        "difficulty": 1,
+        "subfacets": ["creativity", "knowledge"]
+      },
+      {
+        "title": "Visions from the Oracle",
+        "description": "Observe teachings from a wise sage (educational video)",
+        "icon": "🔮",
         "duration_minutes": 30,
         "xp_reward": 20,
-        "difficulty": 2
+        "difficulty": 2,
+        "subfacets": ["learning", "curiosity"]
       },
       {
-        "title": "Language Learner",
-        "description": "Practice a new language for 15 minutes",
+        "title": "The Tongue of Foreign Lands",
+        "description": "Practice the language of a distant kingdom for 15 minutes",
         "icon": "🗣️",
         "duration_minutes": 15,
         "xp_reward": 18,
-        "difficulty": 2
+        "difficulty": 2,
+        "subfacets": ["learning", "knowledge"]
       },
       {
-        "title": "Deep Dive",
-        "description": "Study a complex topic for 45 minutes",
+        "title": "The Inventor's Spark",
+        "description": "Brainstorm ideas for a project or creative endeavor",
+        "icon": "💡",
+        "duration_minutes": 15,
+        "xp_reward": 15,
+        "difficulty": 2,
+        "subfacets": ["creativity", "problem_solving"]
+      },
+      {
+        "title": "Wisdom of the Arcane Library",
+        "description": "Delve deeply into a complex subject for 45 minutes",
         "icon": "📚",
         "duration_minutes": 45,
         "xp_reward": 35,
-        "difficulty": 3
+        "difficulty": 3,
+        "subfacets": ["learning", "knowledge", "curiosity"]
+      },
+      {
+        "title": "The Cartographer's Challenge",
+        "description": "Learn something entirely new about the world today",
+        "icon": "🗺️",
+        "duration_minutes": 20,
+        "xp_reward": 18,
+        "difficulty": 2,
+        "subfacets": ["curiosity", "knowledge"]
       }
     ],
     "vitality": [
       {
-        "title": "Morning Stretch",
-        "description": "Do a 5-minute stretch routine",
-        "icon": "🤸",
+        "title": "Dawn's Awakening",
+        "description": "Perform morning stretches to limber your body",
+        "icon": "🌅",
         "duration_minutes": 5,
         "xp_reward": 8,
-        "difficulty": 1
+        "difficulty": 1,
+        "subfacets": ["exercise", "energy"]
       },
       {
-        "title": "Hydration Quest",
-        "description": "Drink 8 glasses of water today",
+        "title": "The Waterskin's Duty",
+        "description": "Drink 8 flagons of water throughout the day",
         "icon": "💧",
         "duration_minutes": 5,
         "xp_reward": 10,
-        "difficulty": 1
+        "difficulty": 1,
+        "subfacets": ["nutrition", "energy"]
       },
       {
-        "title": "Iron Body Initiation",
-        "description": "Complete a 15-minute workout",
-        "icon": "💪",
+        "title": "The Knight's Drill",
+        "description": "Complete a 15-minute training session",
+        "icon": "⚔️",
         "duration_minutes": 15,
         "xp_reward": 20,
-        "difficulty": 2
+        "difficulty": 2,
+        "subfacets": ["exercise", "endurance"]
       },
       {
-        "title": "Healthy Choices",
-        "description": "Prepare a nutritious meal from scratch",
+        "title": "The Herbalist's Feast",
+        "description": "Prepare a nourishing meal from wholesome ingredients",
         "icon": "🥗",
         "duration_minutes": 30,
         "xp_reward": 22,
-        "difficulty": 2
+        "difficulty": 2,
+        "subfacets": ["nutrition"]
       },
       {
-        "title": "Warrior's Training",
-        "description": "Complete a 30-minute intense workout",
+        "title": "The Ranger's March",
+        "description": "Walk for 30 minutes through your domain",
+        "icon": "🚶",
+        "duration_minutes": 30,
+        "xp_reward": 20,
+        "difficulty": 2,
+        "subfacets": ["exercise", "endurance", "energy"]
+      },
+      {
+        "title": "The Dreamweaver's Rest",
+        "description": "Retire to bed at a proper hour for restful slumber",
+        "icon": "🌙",
+        "duration_minutes": 10,
+        "xp_reward": 15,
+        "difficulty": 1,
+        "subfacets": ["sleep", "energy"]
+      },
+      {
+        "title": "The Gladiator's Trial",
+        "description": "Endure a grueling 30-minute combat training (intense workout)",
         "icon": "🏋️",
         "duration_minutes": 30,
         "xp_reward": 35,
-        "difficulty": 3
+        "difficulty": 3,
+        "subfacets": ["exercise", "endurance", "energy"]
+      },
+      {
+        "title": "The Alchemist's Elixir",
+        "description": "Abstain from sugary potions and processed fare today",
+        "icon": "⚗️",
+        "duration_minutes": 5,
+        "xp_reward": 15,
+        "difficulty": 2,
+        "subfacets": ["nutrition", "energy"]
       }
     ],
     "spirit": [
       {
-        "title": "Moment of Peace",
-        "description": "Practice 5 minutes of deep breathing",
+        "title": "The Monk's Breath",
+        "description": "Practice 5 minutes of deep, mindful breathing",
         "icon": "🌬️",
         "duration_minutes": 5,
         "xp_reward": 8,
-        "difficulty": 1
+        "difficulty": 1,
+        "subfacets": ["mindfulness", "inner_peace"]
       },
       {
         "title": "The Gratitude Scroll",
-        "description": "Write 3 things you're grateful for",
+        "description": "Inscribe three blessings you are thankful for",
         "icon": "🙏",
         "duration_minutes": 5,
         "xp_reward": 10,
-        "difficulty": 1
+        "difficulty": 1,
+        "subfacets": ["gratitude"]
       },
       {
-        "title": "Inner Calm",
-        "description": "Meditate for 10 minutes",
-        "icon": "🧘",
+        "title": "The Mirror of Reflection",
+        "description": "Examine your emotions—name what you feel and why",
+        "icon": "🪞",
         "duration_minutes": 10,
-        "xp_reward": 18,
-        "difficulty": 2
+        "xp_reward": 15,
+        "difficulty": 2,
+        "subfacets": ["emotional_awareness", "mindfulness"]
       },
       {
-        "title": "Nature's Embrace",
-        "description": "Spend 20 minutes in nature",
+        "title": "Communion with the Grove",
+        "description": "Spend 20 minutes in nature's embrace",
         "icon": "🌳",
         "duration_minutes": 20,
         "xp_reward": 20,
-        "difficulty": 2
+        "difficulty": 2,
+        "subfacets": ["inner_peace", "mindfulness"]
       },
       {
-        "title": "Deep Meditation",
-        "description": "Complete a 20-minute guided meditation",
+        "title": "The Hermit's Vigil",
+        "description": "Meditate in stillness for 10 minutes",
+        "icon": "🧘",
+        "duration_minutes": 10,
+        "xp_reward": 18,
+        "difficulty": 2,
+        "subfacets": ["mindfulness", "inner_peace"]
+      },
+      {
+        "title": "The Phoenix's Ember",
+        "description": "Face a small fear or discomfort with courage",
+        "icon": "🔥",
+        "duration_minutes": 15,
+        "xp_reward": 25,
+        "difficulty": 3,
+        "subfacets": ["resilience", "emotional_awareness"]
+      },
+      {
+        "title": "The Temple's Silence",
+        "description": "Complete a 20-minute guided meditation journey",
         "icon": "🕯️",
         "duration_minutes": 20,
         "xp_reward": 30,
-        "difficulty": 3
+        "difficulty": 3,
+        "subfacets": ["mindfulness", "inner_peace", "emotional_awareness"]
+      },
+      {
+        "title": "The Stoic's Practice",
+        "description": "When frustration arises, pause and respond with calm",
+        "icon": "🗿",
+        "duration_minutes": 5,
+        "xp_reward": 15,
+        "difficulty": 2,
+        "subfacets": ["resilience", "emotional_awareness"]
       }
     ],
     "bonds": [
       {
-        "title": "Quick Connect",
-        "description": "Send a thoughtful message to someone",
-        "icon": "💬",
+        "title": "The Messenger's Errand",
+        "description": "Send a thoughtful message to a friend or ally",
+        "icon": "📨",
         "duration_minutes": 5,
         "xp_reward": 10,
-        "difficulty": 1
+        "difficulty": 1,
+        "subfacets": ["friendship", "communication"]
       },
       {
-        "title": "Kindness Token",
-        "description": "Do a small act of kindness for someone",
+        "title": "A Token of Kindness",
+        "description": "Perform a small act of generosity for another soul",
         "icon": "💝",
         "duration_minutes": 5,
         "xp_reward": 12,
-        "difficulty": 1
+        "difficulty": 1,
+        "subfacets": ["community", "friendship"]
       },
       {
-        "title": "The Social Guild",
-        "description": "Reach out to a friend you haven't spoken to",
-        "icon": "📞",
+        "title": "The Hearth's Warmth",
+        "description": "Share a meal or conversation with your household",
+        "icon": "🏠",
+        "duration_minutes": 30,
+        "xp_reward": 22,
+        "difficulty": 2,
+        "subfacets": ["family", "communication"]
+      },
+      {
+        "title": "The Raven's Call",
+        "description": "Reach out to a companion you haven't spoken with lately",
+        "icon": "🐦‍⬛",
         "duration_minutes": 15,
         "xp_reward": 20,
-        "difficulty": 2
+        "difficulty": 2,
+        "subfacets": ["friendship", "communication"]
       },
       {
-        "title": "Quality Time",
-        "description": "Spend 30 minutes of focused time with loved ones",
-        "icon": "👨‍👩‍👧",
+        "title": "The Bard's Listening Ear",
+        "description": "Give someone your full attention as they speak",
+        "icon": "👂",
+        "duration_minutes": 15,
+        "xp_reward": 18,
+        "difficulty": 2,
+        "subfacets": ["communication", "friendship"]
+      },
+      {
+        "title": "The Courtship Ritual",
+        "description": "Plan or do something special for your beloved",
+        "icon": "💕",
         "duration_minutes": 30,
         "xp_reward": 25,
-        "difficulty": 2
+        "difficulty": 2,
+        "subfacets": ["romance", "communication"]
       },
       {
-        "title": "Deep Connection",
-        "description": "Have a meaningful 1-hour conversation",
+        "title": "The Council Gathering",
+        "description": "Engage meaningfully with your broader community",
+        "icon": "🏘️",
+        "duration_minutes": 30,
+        "xp_reward": 25,
+        "difficulty": 2,
+        "subfacets": ["community"]
+      },
+      {
+        "title": "The Sacred Vow",
+        "description": "Have a deep, meaningful conversation for an hour",
         "icon": "🤝",
         "duration_minutes": 60,
         "xp_reward": 35,
-        "difficulty": 3
+        "difficulty": 3,
+        "subfacets": ["friendship", "communication", "family"]
       }
     ],
     "prosperity": [
       {
-        "title": "Budget Check",
-        "description": "Review your expenses for 10 minutes",
+        "title": "The Treasurer's Audit",
+        "description": "Review your coin purse and expenses for 10 minutes",
         "icon": "📊",
         "duration_minutes": 10,
         "xp_reward": 12,
-        "difficulty": 1
+        "difficulty": 1,
+        "subfacets": ["finances", "stability"]
       },
       {
-        "title": "Career Reflection",
-        "description": "Write down one professional goal",
+        "title": "The Ambition Stone",
+        "description": "Write down one goal for your trade or profession",
         "icon": "🎯",
         "duration_minutes": 5,
         "xp_reward": 10,
-        "difficulty": 1
+        "difficulty": 1,
+        "subfacets": ["ambition", "career"]
       },
       {
-        "title": "Network Builder",
-        "description": "Connect with a professional contact",
+        "title": "The Merchant's Ledger",
+        "description": "Track all your expenditures for the day",
+        "icon": "📒",
+        "duration_minutes": 10,
+        "xp_reward": 12,
+        "difficulty": 1,
+        "subfacets": ["finances"]
+      },
+      {
+        "title": "The Guild Alliance",
+        "description": "Connect with a fellow professional in your field",
         "icon": "🤝",
         "duration_minutes": 15,
         "xp_reward": 20,
-        "difficulty": 2
+        "difficulty": 2,
+        "subfacets": ["career", "growth"]
       },
       {
-        "title": "Learning Investment",
-        "description": "Take an online course lesson",
+        "title": "The Apprentice's Lesson",
+        "description": "Take a lesson in your craft (online course, tutorial)",
         "icon": "🎓",
         "duration_minutes": 30,
         "xp_reward": 25,
-        "difficulty": 2
+        "difficulty": 2,
+        "subfacets": ["growth", "career"]
       },
       {
-        "title": "Financial Planning",
-        "description": "Create or update your budget plan",
+        "title": "The Steward's Foresight",
+        "description": "Plan your tasks and priorities for the morrow",
+        "icon": "📋",
+        "duration_minutes": 10,
+        "xp_reward": 12,
+        "difficulty": 1,
+        "subfacets": ["stability", "ambition"]
+      },
+      {
+        "title": "The Royal Treasury",
+        "description": "Create or refine your budget and savings plan",
         "icon": "💰",
         "duration_minutes": 45,
         "xp_reward": 35,
-        "difficulty": 3
+        "difficulty": 3,
+        "subfacets": ["finances", "stability", "growth"]
+      },
+      {
+        "title": "The Ladder's Next Rung",
+        "description": "Work on advancing your standing in your trade",
+        "icon": "📈",
+        "duration_minutes": 45,
+        "xp_reward": 35,
+        "difficulty": 3,
+        "subfacets": ["career", "ambition", "growth"]
       }
     ],
     "mastery": [
       {
-        "title": "Daily Practice",
-        "description": "Practice a skill for 10 minutes",
+        "title": "The Daily Drill",
+        "description": "Practice your chosen craft for 10 minutes",
         "icon": "🎸",
         "duration_minutes": 10,
         "xp_reward": 12,
-        "difficulty": 1
+        "difficulty": 1,
+        "subfacets": ["skills", "discipline"]
       },
       {
-        "title": "Creative Spark",
-        "description": "Spend 10 minutes on a creative hobby",
+        "title": "The Muse's Whisper",
+        "description": "Spend 10 minutes on a creative pursuit",
         "icon": "🎨",
         "duration_minutes": 10,
         "xp_reward": 12,
-        "difficulty": 1
+        "difficulty": 1,
+        "subfacets": ["hobbies", "craftsmanship"]
       },
       {
-        "title": "The Artisan's Trial",
-        "description": "Spend 30 minutes on a creative hobby",
+        "title": "The Forge's Heat",
+        "description": "Work on perfecting a technique in your craft",
+        "icon": "⚒️",
+        "duration_minutes": 20,
+        "xp_reward": 18,
+        "difficulty": 2,
+        "subfacets": ["craftsmanship", "skills"]
+      },
+      {
+        "title": "The Artisan's Workshop",
+        "description": "Dedicate 30 minutes to your creative hobby",
         "icon": "🖌️",
         "duration_minutes": 30,
         "xp_reward": 22,
-        "difficulty": 2
+        "difficulty": 2,
+        "subfacets": ["hobbies", "craftsmanship", "discipline"]
       },
       {
-        "title": "Project Progress",
-        "description": "Work on a personal project for 30 minutes",
-        "icon": "🛠️",
+        "title": "The Unfinished Tower",
+        "description": "Make progress on a personal project for 30 minutes",
+        "icon": "🏗️",
         "duration_minutes": 30,
         "xp_reward": 25,
-        "difficulty": 2
+        "difficulty": 2,
+        "subfacets": ["dedication", "skills"]
       },
       {
-        "title": "Deep Work",
-        "description": "Focus on mastery practice for 1 hour",
-        "icon": "⚒️",
+        "title": "The Oath of Focus",
+        "description": "Complete a task without succumbing to distraction",
+        "icon": "🧿",
+        "duration_minutes": 25,
+        "xp_reward": 20,
+        "difficulty": 2,
+        "subfacets": ["discipline", "dedication"]
+      },
+      {
+        "title": "The Master's Hour",
+        "description": "Devote a full hour to mastering your craft",
+        "icon": "⏳",
         "duration_minutes": 60,
         "xp_reward": 40,
-        "difficulty": 3
+        "difficulty": 3,
+        "subfacets": ["skills", "discipline", "craftsmanship"]
+      },
+      {
+        "title": "The Novice's First Steps",
+        "description": "Attempt something new in your area of interest",
+        "icon": "🌱",
+        "duration_minutes": 20,
+        "xp_reward": 18,
+        "difficulty": 2,
+        "subfacets": ["hobbies", "skills"]
       }
     ]
   },
   "weekly_quests": [
     {
-      "title": "Knowledge Marathon",
-      "description": "Read for a total of 2 hours this week",
+      "title": "The Lorekeeper's Marathon",
+      "description": "Accumulate 2 hours of reading throughout the week",
       "icon": "📚",
       "stat": "intellect",
       "xp_reward": 100,
-      "difficulty": 3
+      "difficulty": 3,
+      "subfacets": ["learning", "knowledge"]
     },
     {
-      "title": "Fitness Journey",
-      "description": "Exercise 4 times this week",
-      "icon": "💪",
+      "title": "The Warrior's Regimen",
+      "description": "Train your body 4 times this week",
+      "icon": "⚔️",
       "stat": "vitality",
       "xp_reward": 120,
-      "difficulty": 3
+      "difficulty": 3,
+      "subfacets": ["exercise", "endurance"]
     },
     {
-      "title": "Inner Peace Week",
-      "description": "Meditate every day this week",
+      "title": "The Pilgrim's Journey",
+      "description": "Meditate every day for an entire week",
       "icon": "🧘",
       "stat": "spirit",
       "xp_reward": 100,
-      "difficulty": 3
+      "difficulty": 3,
+      "subfacets": ["mindfulness", "inner_peace"]
     },
     {
-      "title": "Social Butterfly",
-      "description": "Connect with 3 different friends this week",
+      "title": "The Diplomat's Round",
+      "description": "Connect meaningfully with 3 different allies this week",
       "icon": "💝",
       "stat": "bonds",
       "xp_reward": 100,
-      "difficulty": 3
+      "difficulty": 3,
+      "subfacets": ["friendship", "communication"]
     },
     {
-      "title": "Career Focus",
-      "description": "Dedicate 3 hours to professional development",
+      "title": "The Merchant Prince's Vigil",
+      "description": "Dedicate 3 hours to professional advancement",
       "icon": "💰",
       "stat": "prosperity",
       "xp_reward": 110,
-      "difficulty": 3
+      "difficulty": 3,
+      "subfacets": ["career", "growth"]
     },
     {
-      "title": "Craft Master",
-      "description": "Practice your craft for 3 hours total",
+      "title": "The Artisan's Dedication",
+      "description": "Practice your craft for 3 hours total this week",
       "icon": "🎯",
       "stat": "mastery",
       "xp_reward": 100,
-      "difficulty": 3
+      "difficulty": 3,
+      "subfacets": ["skills", "discipline"]
+    },
+    {
+      "title": "The Sage's Curiosity",
+      "description": "Learn something new in 3 different subjects",
+      "icon": "🔍",
+      "stat": "intellect",
+      "xp_reward": 90,
+      "difficulty": 2,
+      "subfacets": ["curiosity", "learning"]
+    },
+    {
+      "title": "The Alchemist's Balance",
+      "description": "Prepare 5 wholesome meals from scratch",
+      "icon": "🥗",
+      "stat": "vitality",
+      "xp_reward": 100,
+      "difficulty": 3,
+      "subfacets": ["nutrition", "energy"]
+    },
+    {
+      "title": "The Gratitude Codex",
+      "description": "Write in your gratitude scroll every day this week",
+      "icon": "🙏",
+      "stat": "spirit",
+      "xp_reward": 90,
+      "difficulty": 2,
+      "subfacets": ["gratitude", "emotional_awareness"]
+    },
+    {
+      "title": "The Kinkeeper's Duty",
+      "description": "Spend quality time with family on 3 occasions",
+      "icon": "👨‍👩‍👧‍👦",
+      "stat": "bonds",
+      "xp_reward": 100,
+      "difficulty": 3,
+      "subfacets": ["family", "communication"]
+    },
+    {
+      "title": "The Treasurer's Vigil",
+      "description": "Review your finances and track expenses all week",
+      "icon": "📊",
+      "stat": "prosperity",
+      "xp_reward": 90,
+      "difficulty": 2,
+      "subfacets": ["finances", "stability"]
+    },
+    {
+      "title": "The Perfectionist's Pursuit",
+      "description": "Focus on improving one specific skill intensively",
+      "icon": "⚒️",
+      "stat": "mastery",
+      "xp_reward": 110,
+      "difficulty": 3,
+      "subfacets": ["craftsmanship", "dedication"]
     }
   ],
   "epic_quests": [
     {
-      "title": "The Scholar's Journey",
-      "description": "Read 5 books this month",
+      "title": "The Great Library Pilgrimage",
+      "description": "Complete 5 tomes (books) within a moon's cycle",
       "icon": "📖",
       "stat": "intellect",
       "xp_reward": 500,
-      "difficulty": 4
+      "difficulty": 4,
+      "subfacets": ["learning", "knowledge", "curiosity"]
     },
     {
-      "title": "Iron Will Challenge",
-      "description": "Complete a 30-day fitness challenge",
+      "title": "The Iron Will Challenge",
+      "description": "Complete 30 consecutive days of physical training",
       "icon": "🏆",
       "stat": "vitality",
       "xp_reward": 600,
-      "difficulty": 4
+      "difficulty": 4,
+      "subfacets": ["exercise", "endurance", "discipline"]
     },
     {
-      "title": "Meditation Master",
-      "description": "Meditate daily for 30 consecutive days",
+      "title": "The Enlightened Path",
+      "description": "Maintain a daily meditation practice for 30 days",
       "icon": "🕯️",
       "stat": "spirit",
       "xp_reward": 500,
-      "difficulty": 4
+      "difficulty": 4,
+      "subfacets": ["mindfulness", "inner_peace", "resilience"]
     },
     {
-      "title": "Social Champion",
-      "description": "Strengthen 10 relationships this month",
+      "title": "The Fellowship's Oath",
+      "description": "Meaningfully strengthen 10 bonds this month",
       "icon": "👥",
       "stat": "bonds",
       "xp_reward": 500,
-      "difficulty": 4
+      "difficulty": 4,
+      "subfacets": ["friendship", "family", "community"]
     },
     {
-      "title": "Career Breakthrough",
-      "description": "Complete a major professional certification",
+      "title": "The Royal Certification",
+      "description": "Complete a major professional credential or certification",
       "icon": "🎓",
       "stat": "prosperity",
       "xp_reward": 800,
-      "difficulty": 5
+      "difficulty": 5,
+      "subfacets": ["career", "growth", "ambition"]
     },
     {
-      "title": "Masterpiece",
-      "description": "Complete a significant personal project",
+      "title": "The Magnum Opus",
+      "description": "Complete a significant personal masterwork",
       "icon": "✨",
       "stat": "mastery",
       "xp_reward": 700,
-      "difficulty": 5
+      "difficulty": 5,
+      "subfacets": ["craftsmanship", "dedication", "skills"]
+    },
+    {
+      "title": "The Polymath's Dream",
+      "description": "Achieve basic competency in a new skill or language",
+      "icon": "🌟",
+      "stat": "intellect",
+      "xp_reward": 600,
+      "difficulty": 4,
+      "subfacets": ["learning", "creativity", "problem_solving"]
+    },
+    {
+      "title": "The Transformation",
+      "description": "Establish 3 new healthy habits that persist for a month",
+      "icon": "🦋",
+      "stat": "vitality",
+      "xp_reward": 550,
+      "difficulty": 4,
+      "subfacets": ["nutrition", "sleep", "energy"]
+    },
+    {
+      "title": "The Inner Dragon",
+      "description": "Conquer a significant fear or long-held limitation",
+      "icon": "🐉",
+      "stat": "spirit",
+      "xp_reward": 600,
+      "difficulty": 4,
+      "subfacets": ["resilience", "emotional_awareness"]
+    },
+    {
+      "title": "The Bridge Builder",
+      "description": "Mend a broken relationship or forge a powerful new alliance",
+      "icon": "🌉",
+      "stat": "bonds",
+      "xp_reward": 550,
+      "difficulty": 4,
+      "subfacets": ["communication", "friendship", "family"]
+    },
+    {
+      "title": "The Golden Milestone",
+      "description": "Achieve a significant financial goal (savings, debt, investment)",
+      "icon": "🏰",
+      "stat": "prosperity",
+      "xp_reward": 700,
+      "difficulty": 5,
+      "subfacets": ["finances", "stability", "growth"]
+    },
+    {
+      "title": "The Thousand-Hour Journey",
+      "description": "Dedicate 50 hours to mastering a single skill",
+      "icon": "⌛",
+      "stat": "mastery",
+      "xp_reward": 800,
+      "difficulty": 5,
+      "subfacets": ["discipline", "dedication", "skills"]
+    }
+  ],
+  "special_quests": [
+    {
+      "title": "The Day of Rest",
+      "description": "Take a complete rest day with no obligations",
+      "icon": "😴",
+      "stat": "vitality",
+      "xp_reward": 25,
+      "difficulty": 2,
+      "subfacets": ["sleep", "energy"],
+      "trigger": "weekend"
+    },
+    {
+      "title": "The Digital Sabbath",
+      "description": "Spend 4 hours away from all screens",
+      "icon": "📵",
+      "stat": "spirit",
+      "xp_reward": 30,
+      "difficulty": 2,
+      "subfacets": ["inner_peace", "mindfulness"],
+      "trigger": "weekend"
+    },
+    {
+      "title": "The Feast of Fellowship",
+      "description": "Host or attend a gathering with friends or family",
+      "icon": "🎉",
+      "stat": "bonds",
+      "xp_reward": 40,
+      "difficulty": 2,
+      "subfacets": ["friendship", "family", "community"],
+      "trigger": "weekend"
+    },
+    {
+      "title": "The Dawn Sentinel",
+      "description": "Rise with the sun and greet the morning with purpose",
+      "icon": "🌄",
+      "stat": "vitality",
+      "xp_reward": 20,
+      "difficulty": 2,
+      "subfacets": ["energy", "discipline"],
+      "trigger": "morning"
+    },
+    {
+      "title": "The Evening Reflection",
+      "description": "Review your day and plan improvements for tomorrow",
+      "icon": "🌆",
+      "stat": "spirit",
+      "xp_reward": 15,
+      "difficulty": 1,
+      "subfacets": ["emotional_awareness", "mindfulness"],
+      "trigger": "evening"
+    },
+    {
+      "title": "The Random Act of Nobility",
+      "description": "Do something unexpectedly kind for a stranger",
+      "icon": "👑",
+      "stat": "bonds",
+      "xp_reward": 25,
+      "difficulty": 2,
+      "subfacets": ["community", "communication"],
+      "trigger": "random"
+    },
+    {
+      "title": "The Decluttering Crusade",
+      "description": "Organize and purge one area of your living space",
+      "icon": "🧹",
+      "stat": "prosperity",
+      "xp_reward": 20,
+      "difficulty": 2,
+      "subfacets": ["stability"],
+      "trigger": "random"
+    },
+    {
+      "title": "The Courage Trial",
+      "description": "Do something outside your comfort zone today",
+      "icon": "🦁",
+      "stat": "spirit",
+      "xp_reward": 30,
+      "difficulty": 3,
+      "subfacets": ["resilience", "emotional_awareness"],
+      "trigger": "random"
     }
   ]
 }
-
