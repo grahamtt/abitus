@@ -1,0 +1,886 @@
+{
+  "meta": {
+    "version": "1.0",
+    "description": "Character assessment interview questions with medieval RPG theming",
+    "instructions": "Questions are grouped by life area. Each answer contributes scores to dimension sub-facets."
+  },
+  
+  "dimensions": {
+    "intellect": {
+      "name": "Intellect",
+      "icon": "📚",
+      "sub_facets": ["learning", "creativity", "curiosity", "problem_solving", "knowledge"]
+    },
+    "vitality": {
+      "name": "Vitality", 
+      "icon": "💪",
+      "sub_facets": ["exercise", "nutrition", "sleep", "energy", "endurance"]
+    },
+    "spirit": {
+      "name": "Spirit",
+      "icon": "🧘",
+      "sub_facets": ["mindfulness", "emotional_awareness", "resilience", "gratitude", "inner_peace"]
+    },
+    "bonds": {
+      "name": "Bonds",
+      "icon": "💝",
+      "sub_facets": ["family", "friendship", "romance", "community", "communication"]
+    },
+    "prosperity": {
+      "name": "Prosperity",
+      "icon": "💰",
+      "sub_facets": ["career", "finances", "ambition", "stability", "growth"]
+    },
+    "mastery": {
+      "name": "Mastery",
+      "icon": "🎯",
+      "sub_facets": ["hobbies", "skills", "discipline", "craftsmanship", "dedication"]
+    }
+  },
+
+  "categories": [
+    {
+      "id": "daily_life",
+      "name": "Daily Life & Routines",
+      "intro": "Let us begin by understanding your daily rituals, brave adventurer...",
+      "questions": [
+        {
+          "id": "morning_ritual",
+          "text": "When the dawn breaks over the kingdom, how do you typically greet the new day?",
+          "answers": [
+            {
+              "text": "I rise before the sun, eager to begin my training and studies",
+              "scores": {"vitality.energy": 4, "mastery.discipline": 4, "spirit.inner_peace": 2}
+            },
+            {
+              "text": "I wake at a reasonable hour, taking time to prepare mind and body",
+              "scores": {"vitality.energy": 3, "spirit.mindfulness": 3, "mastery.discipline": 2}
+            },
+            {
+              "text": "I confess... the bed holds me captive longer than I'd like",
+              "scores": {"vitality.energy": 1, "mastery.discipline": 1, "vitality.sleep": 2}
+            },
+            {
+              "text": "My schedule varies wildly—some days a lark, others an owl",
+              "scores": {"vitality.energy": 2, "mastery.discipline": 1, "intellect.creativity": 2}
+            }
+          ]
+        },
+        {
+          "id": "evening_wind_down",
+          "text": "As twilight falls upon the realm, how do you spend your evening hours?",
+          "answers": [
+            {
+              "text": "Lost in ancient tomes and scrolls, expanding my knowledge",
+              "scores": {"intellect.learning": 4, "intellect.knowledge": 3, "mastery.dedication": 2}
+            },
+            {
+              "text": "In the company of friends and family, sharing tales and laughter",
+              "scores": {"bonds.friendship": 4, "bonds.family": 3, "spirit.gratitude": 2}
+            },
+            {
+              "text": "Practicing my craft or pursuing personal quests",
+              "scores": {"mastery.hobbies": 4, "mastery.skills": 3, "mastery.dedication": 2}
+            },
+            {
+              "text": "Resting and recovering—the day's battles take their toll",
+              "scores": {"vitality.sleep": 3, "spirit.inner_peace": 2, "vitality.energy": 1}
+            },
+            {
+              "text": "Gazing at enchanted screens until the midnight hour",
+              "scores": {"vitality.sleep": 1, "mastery.discipline": 1, "intellect.curiosity": 2}
+            }
+          ]
+        },
+        {
+          "id": "sustenance",
+          "text": "What manner of sustenance fuels your adventures?",
+          "answers": [
+            {
+              "text": "I prepare wholesome meals with care, like a true alchemist of nutrition",
+              "scores": {"vitality.nutrition": 4, "mastery.skills": 2, "mastery.discipline": 2}
+            },
+            {
+              "text": "I eat reasonably well, though convenience sometimes wins the day",
+              "scores": {"vitality.nutrition": 3, "prosperity.stability": 2}
+            },
+            {
+              "text": "Tavern food and quick rations—efficiency over elegance",
+              "scores": {"vitality.nutrition": 2, "prosperity.career": 2, "vitality.energy": 1}
+            },
+            {
+              "text": "I admit my diet would make a healer weep",
+              "scores": {"vitality.nutrition": 1, "vitality.energy": 1}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "physical_prowess",
+      "name": "Physical Prowess",
+      "intro": "Now, let us assess the strength of your mortal vessel...",
+      "questions": [
+        {
+          "id": "combat_training",
+          "text": "How often do you engage in physical training or combat practice?",
+          "answers": [
+            {
+              "text": "Daily—my body is a temple and a weapon",
+              "scores": {"vitality.exercise": 5, "vitality.endurance": 4, "mastery.discipline": 3}
+            },
+            {
+              "text": "Several times per week, maintaining my battle readiness",
+              "scores": {"vitality.exercise": 4, "vitality.endurance": 3, "mastery.discipline": 2}
+            },
+            {
+              "text": "Once or twice weekly—enough to stay functional",
+              "scores": {"vitality.exercise": 2, "vitality.endurance": 2}
+            },
+            {
+              "text": "Rarely... my sword arm grows weak from disuse",
+              "scores": {"vitality.exercise": 1, "vitality.endurance": 1}
+            },
+            {
+              "text": "Physical training? I rely on my wits, not my muscles",
+              "scores": {"vitality.exercise": 1, "intellect.problem_solving": 2}
+            }
+          ]
+        },
+        {
+          "id": "physical_activities",
+          "text": "What forms of physical endeavor call to you?",
+          "multiple_select": true,
+          "answers": [
+            {
+              "text": "Strength training—forging iron sinews in the gymnasium",
+              "scores": {"vitality.exercise": 2, "vitality.endurance": 2, "mastery.discipline": 1}
+            },
+            {
+              "text": "Running, cycling, or swimming—the endurance arts",
+              "scores": {"vitality.exercise": 2, "vitality.endurance": 3, "spirit.inner_peace": 1}
+            },
+            {
+              "text": "Team sports—glory shared with companions",
+              "scores": {"vitality.exercise": 2, "bonds.friendship": 2, "bonds.community": 2}
+            },
+            {
+              "text": "Martial arts or combat sports—the warrior's path",
+              "scores": {"vitality.exercise": 2, "mastery.skills": 2, "mastery.discipline": 2}
+            },
+            {
+              "text": "Yoga, dance, or movement arts—grace and flexibility",
+              "scores": {"vitality.exercise": 2, "spirit.mindfulness": 2, "mastery.skills": 1}
+            },
+            {
+              "text": "Hiking and outdoor adventures—exploring the realm",
+              "scores": {"vitality.exercise": 2, "vitality.endurance": 2, "spirit.inner_peace": 2}
+            },
+            {
+              "text": "None currently call to me",
+              "scores": {"vitality.exercise": 0}
+            }
+          ]
+        },
+        {
+          "id": "sleep_quality",
+          "text": "How would you describe your nightly rest in the realm of dreams?",
+          "answers": [
+            {
+              "text": "I sleep like the dead—deep, restorative slumber",
+              "scores": {"vitality.sleep": 5, "vitality.energy": 4, "spirit.inner_peace": 2}
+            },
+            {
+              "text": "Generally restful, though some nights are troubled",
+              "scores": {"vitality.sleep": 3, "vitality.energy": 3}
+            },
+            {
+              "text": "Fitful and inconsistent—I never know what the night will bring",
+              "scores": {"vitality.sleep": 2, "vitality.energy": 2, "spirit.resilience": 1}
+            },
+            {
+              "text": "Plagued by restlessness—true rest eludes me",
+              "scores": {"vitality.sleep": 1, "vitality.energy": 1}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mind_and_learning",
+      "name": "Mind & Learning",
+      "intro": "The sharpest blade is the mind. Tell me of your intellectual pursuits...",
+      "questions": [
+        {
+          "id": "reading_habits",
+          "text": "How often do you consult the ancient tomes and scrolls (books, articles, educational content)?",
+          "answers": [
+            {
+              "text": "Daily—knowledge is my greatest treasure",
+              "scores": {"intellect.learning": 5, "intellect.knowledge": 4, "intellect.curiosity": 3}
+            },
+            {
+              "text": "Regularly—I make time for learning each week",
+              "scores": {"intellect.learning": 4, "intellect.knowledge": 3, "intellect.curiosity": 2}
+            },
+            {
+              "text": "Occasionally, when a topic catches my interest",
+              "scores": {"intellect.learning": 2, "intellect.curiosity": 3}
+            },
+            {
+              "text": "Rarely—other quests demand my attention",
+              "scores": {"intellect.learning": 1, "intellect.curiosity": 1}
+            }
+          ]
+        },
+        {
+          "id": "learning_style",
+          "text": "When seeking to master new knowledge, what method serves you best?",
+          "answers": [
+            {
+              "text": "Studying texts and documentation—the scholar's way",
+              "scores": {"intellect.learning": 3, "intellect.knowledge": 3, "mastery.discipline": 2}
+            },
+            {
+              "text": "Hands-on practice—learning by doing",
+              "scores": {"intellect.learning": 3, "mastery.skills": 3, "intellect.problem_solving": 2}
+            },
+            {
+              "text": "Learning from masters and mentors—wisdom passed down",
+              "scores": {"intellect.learning": 3, "bonds.community": 2, "mastery.craftsmanship": 2}
+            },
+            {
+              "text": "Visual learning—diagrams, demonstrations, and observations",
+              "scores": {"intellect.learning": 3, "intellect.creativity": 2, "intellect.curiosity": 2}
+            },
+            {
+              "text": "Teaching others—explaining cements understanding",
+              "scores": {"intellect.learning": 3, "bonds.communication": 3, "intellect.knowledge": 2}
+            }
+          ]
+        },
+        {
+          "id": "problem_approach",
+          "text": "When faced with a perplexing puzzle or challenge, what is your approach?",
+          "answers": [
+            {
+              "text": "I analyze methodically, breaking it into smaller pieces",
+              "scores": {"intellect.problem_solving": 4, "mastery.discipline": 2, "intellect.knowledge": 2}
+            },
+            {
+              "text": "I seek creative, unconventional solutions",
+              "scores": {"intellect.creativity": 4, "intellect.problem_solving": 3, "intellect.curiosity": 2}
+            },
+            {
+              "text": "I consult with allies who might have insight",
+              "scores": {"bonds.communication": 3, "bonds.friendship": 2, "intellect.problem_solving": 2}
+            },
+            {
+              "text": "I trust my instincts and dive in headfirst",
+              "scores": {"spirit.resilience": 3, "intellect.problem_solving": 2, "mastery.dedication": 2}
+            },
+            {
+              "text": "I research extensively before acting",
+              "scores": {"intellect.knowledge": 4, "intellect.problem_solving": 3, "mastery.discipline": 2}
+            }
+          ]
+        },
+        {
+          "id": "curiosity",
+          "text": "When you encounter something unknown or mysterious, what stirs within you?",
+          "answers": [
+            {
+              "text": "Excitement! I must investigate and understand",
+              "scores": {"intellect.curiosity": 5, "intellect.learning": 3, "spirit.inner_peace": 1}
+            },
+            {
+              "text": "Interest, if it seems relevant to my goals",
+              "scores": {"intellect.curiosity": 3, "prosperity.ambition": 2, "mastery.dedication": 2}
+            },
+            {
+              "text": "Caution—not all mysteries are meant to be solved",
+              "scores": {"intellect.curiosity": 2, "spirit.resilience": 2, "intellect.problem_solving": 2}
+            },
+            {
+              "text": "Indifference—I have enough on my plate",
+              "scores": {"intellect.curiosity": 1, "mastery.discipline": 2}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spirit_and_emotion",
+      "name": "Spirit & Emotion",
+      "intro": "The inner realm is as vast as the outer. Let us explore your spiritual depths...",
+      "questions": [
+        {
+          "id": "stress_response",
+          "text": "When dark clouds gather and stress threatens to overwhelm, how do you respond?",
+          "answers": [
+            {
+              "text": "I have rituals and practices that restore my calm",
+              "scores": {"spirit.resilience": 4, "spirit.mindfulness": 4, "spirit.inner_peace": 3}
+            },
+            {
+              "text": "I seek the company of trusted allies for support",
+              "scores": {"spirit.resilience": 3, "bonds.friendship": 3, "bonds.communication": 2}
+            },
+            {
+              "text": "I push through—there's no time for weakness",
+              "scores": {"spirit.resilience": 2, "mastery.discipline": 3, "prosperity.ambition": 2}
+            },
+            {
+              "text": "I struggle... the storms often get the better of me",
+              "scores": {"spirit.resilience": 1, "spirit.emotional_awareness": 2}
+            },
+            {
+              "text": "Physical activity helps me burn off the tension",
+              "scores": {"spirit.resilience": 3, "vitality.exercise": 2, "spirit.inner_peace": 2}
+            }
+          ]
+        },
+        {
+          "id": "mindfulness_practice",
+          "text": "Do you commune with the stillness—through meditation, prayer, or quiet contemplation?",
+          "answers": [
+            {
+              "text": "Aye, such practice is the cornerstone of my daily ritual",
+              "scores": {"spirit.mindfulness": 5, "spirit.inner_peace": 4, "spirit.emotional_awareness": 3}
+            },
+            {
+              "text": "At times—when the chaos grows too loud or the spirit calls",
+              "scores": {"spirit.mindfulness": 3, "spirit.inner_peace": 2, "spirit.emotional_awareness": 2}
+            },
+            {
+              "text": "I have sought the stillness, but it eludes my restless mind",
+              "scores": {"spirit.mindfulness": 2, "spirit.inner_peace": 1, "mastery.discipline": 1}
+            },
+            {
+              "text": "That path is not mine—I find my peace through other means",
+              "scores": {"spirit.mindfulness": 1, "spirit.inner_peace": 2}
+            }
+          ]
+        },
+        {
+          "id": "gratitude",
+          "text": "How often do you pause to count your blessings and appreciate what you have?",
+          "answers": [
+            {
+              "text": "Daily—gratitude is a practice I cultivate intentionally",
+              "scores": {"spirit.gratitude": 5, "spirit.inner_peace": 3, "spirit.emotional_awareness": 2}
+            },
+            {
+              "text": "Often—I try to notice the good things in life",
+              "scores": {"spirit.gratitude": 4, "spirit.inner_peace": 2, "spirit.emotional_awareness": 2}
+            },
+            {
+              "text": "Sometimes, usually when something reminds me",
+              "scores": {"spirit.gratitude": 2, "spirit.emotional_awareness": 2}
+            },
+            {
+              "text": "Rarely—I'm usually focused on what's lacking",
+              "scores": {"spirit.gratitude": 1, "prosperity.ambition": 2}
+            }
+          ]
+        },
+        {
+          "id": "emotional_awareness",
+          "text": "How well do you know the storms and calms of your own heart?",
+          "answers": [
+            {
+              "text": "I have mastered the art of reading my soul's weather",
+              "scores": {"spirit.emotional_awareness": 5, "spirit.mindfulness": 3, "bonds.communication": 2}
+            },
+            {
+              "text": "I can name most of the winds that blow through me",
+              "scores": {"spirit.emotional_awareness": 3, "spirit.mindfulness": 2}
+            },
+            {
+              "text": "My inner realm remains somewhat mysterious to me",
+              "scores": {"spirit.emotional_awareness": 2, "intellect.curiosity": 2}
+            },
+            {
+              "text": "I am a creature of reason—the heart's whispers hold little sway",
+              "scores": {"spirit.emotional_awareness": 1, "intellect.problem_solving": 3}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "relationships",
+      "name": "Relationships & Bonds",
+      "intro": "No hero stands alone. Tell me of your companions and connections...",
+      "questions": [
+        {
+          "id": "social_energy",
+          "text": "In matters of social gatherings and companionship, what is your nature?",
+          "answers": [
+            {
+              "text": "I thrive in the company of others—the more, the merrier!",
+              "scores": {"bonds.community": 4, "bonds.friendship": 3, "vitality.energy": 2}
+            },
+            {
+              "text": "I enjoy socializing, but need time alone to recharge",
+              "scores": {"bonds.friendship": 3, "spirit.inner_peace": 2, "bonds.community": 2}
+            },
+            {
+              "text": "I prefer small gatherings with close allies",
+              "scores": {"bonds.friendship": 4, "bonds.communication": 3, "spirit.inner_peace": 2}
+            },
+            {
+              "text": "Solitude is my natural state—I'm content alone",
+              "scores": {"spirit.inner_peace": 3, "mastery.dedication": 2, "bonds.friendship": 1}
+            }
+          ]
+        },
+        {
+          "id": "friendship_maintenance",
+          "text": "How faithfully do you tend to your friendships and sworn alliances?",
+          "answers": [
+            {
+              "text": "I am the keeper of bonds—I send ravens and ride forth to maintain our fellowship",
+              "scores": {"bonds.friendship": 5, "bonds.communication": 4, "bonds.community": 3}
+            },
+            {
+              "text": "I strive to honor my bonds, though the demands of the realm sometimes intervene",
+              "scores": {"bonds.friendship": 3, "bonds.communication": 2}
+            },
+            {
+              "text": "I await word from others before venturing forth to meet them",
+              "scores": {"bonds.friendship": 2, "bonds.communication": 1}
+            },
+            {
+              "text": "Many companions have faded into the mists of memory, I confess",
+              "scores": {"bonds.friendship": 1, "bonds.community": 1}
+            }
+          ]
+        },
+        {
+          "id": "family_bonds",
+          "text": "Tell me of your house and bloodline—what binds you to your kin?",
+          "answers": [
+            {
+              "text": "Our house stands united—my kin are the bedrock upon which I build",
+              "scores": {"bonds.family": 5, "spirit.gratitude": 2, "spirit.inner_peace": 2}
+            },
+            {
+              "text": "We share warm hearths when fate allows, though leagues often separate us",
+              "scores": {"bonds.family": 3, "bonds.communication": 2}
+            },
+            {
+              "text": "Our history is written in both triumph and shadow, as with many noble houses",
+              "scores": {"bonds.family": 2, "spirit.resilience": 2, "spirit.emotional_awareness": 2}
+            },
+            {
+              "text": "I have forged my own fellowship—my true family is chosen, not born",
+              "scores": {"bonds.family": 1, "bonds.friendship": 3, "spirit.resilience": 2}
+            },
+            {
+              "text": "My kin are my sacred charge—I devote my days to their welfare",
+              "scores": {"bonds.family": 5, "mastery.dedication": 2, "spirit.gratitude": 3}
+            }
+          ]
+        },
+        {
+          "id": "romantic_status",
+          "text": "What of matters of the heart—romantic bonds and partnerships?",
+          "answers": [
+            {
+              "text": "I am in a fulfilling partnership that strengthens us both",
+              "scores": {"bonds.romance": 5, "spirit.inner_peace": 2, "spirit.gratitude": 2}
+            },
+            {
+              "text": "I am partnered, though we face our share of challenges",
+              "scores": {"bonds.romance": 3, "bonds.communication": 2, "spirit.resilience": 2}
+            },
+            {
+              "text": "I am seeking a worthy companion for my journey",
+              "scores": {"bonds.romance": 2, "bonds.community": 2, "prosperity.ambition": 1}
+            },
+            {
+              "text": "I am content walking my path alone for now",
+              "scores": {"bonds.romance": 2, "spirit.inner_peace": 3, "mastery.dedication": 2}
+            },
+            {
+              "text": "Romance is not a priority—other quests call to me",
+              "scores": {"bonds.romance": 1, "mastery.dedication": 3, "prosperity.ambition": 2}
+            }
+          ]
+        },
+        {
+          "id": "communication_style",
+          "text": "How skilled are you in the art of parley and discourse with your fellow travelers?",
+          "answers": [
+            {
+              "text": "I wield words as a knight wields steel—with precision and power",
+              "scores": {"bonds.communication": 5, "intellect.problem_solving": 2, "bonds.friendship": 2}
+            },
+            {
+              "text": "When I choose my words with care, they find their mark true",
+              "scores": {"bonds.communication": 3, "mastery.skills": 2}
+            },
+            {
+              "text": "My strength lies in hearing others—I am a keeper of confidences",
+              "scores": {"bonds.communication": 3, "spirit.emotional_awareness": 3, "bonds.friendship": 2}
+            },
+            {
+              "text": "The right words often flee when I reach for them",
+              "scores": {"bonds.communication": 1, "spirit.emotional_awareness": 2}
+            },
+            {
+              "text": "Let my deeds speak for me—words are wind",
+              "scores": {"bonds.communication": 2, "mastery.dedication": 3, "mastery.skills": 2}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "work_and_prosperity",
+      "name": "Work & Prosperity",
+      "intro": "Gold and glory—let us discuss your professional pursuits and material standing...",
+      "questions": [
+        {
+          "id": "work_satisfaction",
+          "text": "What say you of your current craft or station in the realm?",
+          "answers": [
+            {
+              "text": "It is my sacred calling—the gods themselves placed me upon this path",
+              "scores": {"prosperity.career": 5, "mastery.dedication": 4, "spirit.inner_peace": 3}
+            },
+            {
+              "text": "My trade brings honor and purpose, though dragons must sometimes be faced",
+              "scores": {"prosperity.career": 4, "prosperity.stability": 3, "spirit.resilience": 2}
+            },
+            {
+              "text": "It fills my coffers—my true passions lie beyond the workshop walls",
+              "scores": {"prosperity.career": 2, "prosperity.stability": 3, "mastery.hobbies": 2}
+            },
+            {
+              "text": "I seek a new banner to serve under—my current path leads to hollow halls",
+              "scores": {"prosperity.career": 1, "prosperity.ambition": 3, "prosperity.growth": 2}
+            },
+            {
+              "text": "I wander between guilds, seeking where my skills might next be needed",
+              "scores": {"prosperity.career": 1, "prosperity.stability": 1, "prosperity.ambition": 3}
+            }
+          ]
+        },
+        {
+          "id": "career_ambition",
+          "text": "What heights do you aspire to climb in your chosen craft or trade?",
+          "answers": [
+            {
+              "text": "I shall not rest until I am master of my guild, known throughout the realm",
+              "scores": {"prosperity.ambition": 5, "prosperity.growth": 4, "prosperity.career": 2}
+            },
+            {
+              "text": "I seek advancement and renown, but not at the cost of my honor",
+              "scores": {"prosperity.ambition": 3, "prosperity.growth": 3, "prosperity.stability": 2}
+            },
+            {
+              "text": "I have found my place in the order of things and am content to remain",
+              "scores": {"prosperity.stability": 4, "prosperity.ambition": 2, "spirit.inner_peace": 2}
+            },
+            {
+              "text": "I dream of founding my own guild or enterprise under my own banner",
+              "scores": {"prosperity.ambition": 4, "intellect.creativity": 3, "mastery.skills": 2}
+            },
+            {
+              "text": "My craft serves my purse—my true ambitions lie elsewhere",
+              "scores": {"prosperity.ambition": 1, "spirit.inner_peace": 2, "mastery.hobbies": 3}
+            }
+          ]
+        },
+        {
+          "id": "financial_habits",
+          "text": "How would you describe your relationship with gold and resources?",
+          "answers": [
+            {
+              "text": "I am a prudent steward—I save, invest, and plan ahead",
+              "scores": {"prosperity.finances": 5, "prosperity.stability": 4, "mastery.discipline": 3}
+            },
+            {
+              "text": "I manage well enough, though I could be more disciplined",
+              "scores": {"prosperity.finances": 3, "prosperity.stability": 3}
+            },
+            {
+              "text": "I live in the present—gold comes and gold goes",
+              "scores": {"prosperity.finances": 2, "spirit.inner_peace": 2, "prosperity.stability": 1}
+            },
+            {
+              "text": "Finances are a source of stress and struggle",
+              "scores": {"prosperity.finances": 1, "prosperity.stability": 1, "spirit.resilience": 2}
+            }
+          ]
+        },
+        {
+          "id": "work_life_balance",
+          "text": "How do you divide your hours between duty to your craft and the other treasures of life?",
+          "answers": [
+            {
+              "text": "I have found the golden mean—work and life exist in harmony",
+              "scores": {"prosperity.stability": 4, "spirit.inner_peace": 3, "bonds.family": 2}
+            },
+            {
+              "text": "The scales tip and sway, but I fight to keep them level",
+              "scores": {"prosperity.stability": 2, "spirit.resilience": 3, "mastery.discipline": 2}
+            },
+            {
+              "text": "My craft demands much—it oft claims hours that should belong to hearth and home",
+              "scores": {"prosperity.career": 3, "prosperity.ambition": 3, "prosperity.stability": 1}
+            },
+            {
+              "text": "I guard my time fiercely—no guild master shall steal my life away",
+              "scores": {"spirit.inner_peace": 3, "bonds.family": 3, "prosperity.stability": 2}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hobbies_and_mastery",
+      "name": "Hobbies & Mastery",
+      "intro": "Beyond duty lies passion. What pursuits ignite your soul?",
+      "questions": [
+        {
+          "id": "hobby_types",
+          "text": "What manner of hobbies and personal pursuits occupy your free time?",
+          "multiple_select": true,
+          "answers": [
+            {
+              "text": "Creative arts—music, writing, painting, or crafting",
+              "scores": {"mastery.hobbies": 2, "mastery.craftsmanship": 2, "intellect.creativity": 2}
+            },
+            {
+              "text": "Games and puzzles—strategic or playful challenges",
+              "scores": {"mastery.hobbies": 2, "intellect.problem_solving": 2, "bonds.friendship": 1}
+            },
+            {
+              "text": "Outdoor pursuits—gardening, hiking, nature exploration",
+              "scores": {"mastery.hobbies": 2, "vitality.exercise": 2, "spirit.inner_peace": 2}
+            },
+            {
+              "text": "Collecting and curating—building treasured collections",
+              "scores": {"mastery.hobbies": 2, "mastery.dedication": 2, "intellect.knowledge": 1}
+            },
+            {
+              "text": "Tinkering and building—working with hands and tools",
+              "scores": {"mastery.hobbies": 2, "mastery.craftsmanship": 3, "mastery.skills": 2}
+            },
+            {
+              "text": "Digital realms—gaming, coding, or virtual creation",
+              "scores": {"mastery.hobbies": 2, "intellect.problem_solving": 2, "mastery.skills": 2}
+            },
+            {
+              "text": "Cooking and culinary arts—alchemy of the kitchen",
+              "scores": {"mastery.hobbies": 2, "mastery.skills": 2, "vitality.nutrition": 2}
+            },
+            {
+              "text": "Learning languages—tongues of distant lands",
+              "scores": {"mastery.hobbies": 2, "intellect.learning": 3, "bonds.community": 1}
+            },
+            {
+              "text": "I struggle to find time for personal pursuits",
+              "scores": {"mastery.hobbies": 0, "prosperity.stability": 1}
+            }
+          ]
+        },
+        {
+          "id": "skill_development",
+          "text": "Are you apprenticed to any new art or craft, honing abilities yet unmastered?",
+          "answers": [
+            {
+              "text": "Indeed! I train diligently under a new discipline",
+              "scores": {"mastery.skills": 4, "intellect.learning": 3, "mastery.dedication": 3}
+            },
+            {
+              "text": "I sharpen blades already forged—deepening mastery of known arts",
+              "scores": {"mastery.skills": 4, "mastery.craftsmanship": 3, "mastery.dedication": 3}
+            },
+            {
+              "text": "I have glimpsed paths I might walk, but have not yet chosen",
+              "scores": {"mastery.skills": 2, "intellect.curiosity": 2, "mastery.discipline": 1}
+            },
+            {
+              "text": "My energies are devoted elsewhere at present",
+              "scores": {"mastery.skills": 1, "prosperity.stability": 2}
+            }
+          ]
+        },
+        {
+          "id": "project_completion",
+          "text": "When you undertake a personal project, how often do you see it through?",
+          "answers": [
+            {
+              "text": "Almost always—I finish what I start",
+              "scores": {"mastery.dedication": 5, "mastery.discipline": 4, "spirit.resilience": 2}
+            },
+            {
+              "text": "More often than not, though some fall by the wayside",
+              "scores": {"mastery.dedication": 3, "mastery.discipline": 3}
+            },
+            {
+              "text": "I confess to many abandoned quests in my wake",
+              "scores": {"mastery.dedication": 1, "mastery.discipline": 1, "intellect.curiosity": 3}
+            },
+            {
+              "text": "I prefer to start things—endings are overrated",
+              "scores": {"mastery.dedication": 1, "intellect.creativity": 3, "intellect.curiosity": 3}
+            }
+          ]
+        },
+        {
+          "id": "passion_project",
+          "text": "Does a great work call to you—a magnum opus yet to be forged?",
+          "answers": [
+            {
+              "text": "Yes! I labor upon it even now, drawing ever closer to completion",
+              "scores": {"mastery.dedication": 4, "prosperity.ambition": 3, "spirit.inner_peace": 2}
+            },
+            {
+              "text": "The vision burns bright, but the demands of the realm delay my work",
+              "scores": {"mastery.dedication": 2, "prosperity.ambition": 2, "spirit.resilience": 1}
+            },
+            {
+              "text": "Many visions dance before me—I have not yet chosen which to pursue",
+              "scores": {"intellect.creativity": 3, "intellect.curiosity": 3, "mastery.dedication": 1}
+            },
+            {
+              "text": "My current works bring me joy—I seek no grander quest",
+              "scores": {"spirit.inner_peace": 3, "spirit.gratitude": 2, "mastery.hobbies": 2}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "goals_and_aspirations",
+      "name": "Goals & Aspirations",
+      "intro": "Finally, let us speak of the future you wish to forge...",
+      "questions": [
+        {
+          "id": "primary_focus",
+          "text": "If the gods granted you a boon to strengthen one aspect of your being, where would you direct their blessing?",
+          "answers": [
+            {
+              "text": "My body's vigor—strength, endurance, and the fire of life",
+              "scores": {"vitality.exercise": 2, "vitality.energy": 2, "vitality.nutrition": 1},
+              "sets_priority": "vitality"
+            },
+            {
+              "text": "My mind's expansion—wisdom, knowledge, and keen understanding",
+              "scores": {"intellect.learning": 2, "intellect.knowledge": 2, "intellect.curiosity": 1},
+              "sets_priority": "intellect"
+            },
+            {
+              "text": "My spirit's serenity—peace, balance, and emotional mastery",
+              "scores": {"spirit.inner_peace": 2, "spirit.mindfulness": 2, "spirit.emotional_awareness": 1},
+              "sets_priority": "spirit"
+            },
+            {
+              "text": "My bonds with others—fellowship, love, and trusted alliances",
+              "scores": {"bonds.friendship": 2, "bonds.family": 2, "bonds.communication": 1},
+              "sets_priority": "bonds"
+            },
+            {
+              "text": "My fortunes and station—wealth, influence, and worldly success",
+              "scores": {"prosperity.career": 2, "prosperity.finances": 2, "prosperity.growth": 1},
+              "sets_priority": "prosperity"
+            },
+            {
+              "text": "My craft and artistry—skills honed and creations brought forth",
+              "scores": {"mastery.skills": 2, "mastery.hobbies": 2, "mastery.dedication": 1},
+              "sets_priority": "mastery"
+            }
+          ]
+        },
+        {
+          "id": "motivation_style",
+          "text": "What flame burns within you, driving your quest ever onward?",
+          "answers": [
+            {
+              "text": "The forge of self-perfection—to become all that I might be",
+              "scores": {"prosperity.ambition": 3, "mastery.dedication": 3, "spirit.inner_peace": 2}
+            },
+            {
+              "text": "Love's sacred duty—to shield and provide for those bound to my heart",
+              "scores": {"bonds.family": 4, "prosperity.stability": 3, "spirit.gratitude": 2}
+            },
+            {
+              "text": "Wonder's endless call—the thrill of discovery and learning",
+              "scores": {"intellect.curiosity": 4, "intellect.learning": 3, "mastery.skills": 2}
+            },
+            {
+              "text": "A noble purpose—to leave this realm better than I found it",
+              "scores": {"bonds.community": 4, "spirit.gratitude": 3, "prosperity.growth": 2}
+            },
+            {
+              "text": "The hunger for victory—conquering goals and claiming glory",
+              "scores": {"prosperity.ambition": 4, "mastery.discipline": 3, "mastery.dedication": 2}
+            },
+            {
+              "text": "The search for stillness—harmony, contentment, and balance",
+              "scores": {"spirit.inner_peace": 4, "spirit.mindfulness": 3, "prosperity.stability": 2}
+            }
+          ]
+        },
+        {
+          "id": "obstacle_awareness",
+          "text": "What dragon guards the pass between you and your destined glory?",
+          "answers": [
+            {
+              "text": "The hourglass—its sands run swift, and there are never enough",
+              "scores": {"mastery.discipline": 2, "prosperity.stability": 2}
+            },
+            {
+              "text": "A weariness of spirit—I know the path but lack the fire to walk it",
+              "scores": {"vitality.energy": 1, "spirit.resilience": 2, "mastery.discipline": 1}
+            },
+            {
+              "text": "The fog of uncertainty—I cannot see which road to take",
+              "scores": {"intellect.learning": 2, "intellect.knowledge": 1}
+            },
+            {
+              "text": "Empty coffers—gold and provisions are needed for the journey",
+              "scores": {"prosperity.finances": 1, "prosperity.stability": 1}
+            },
+            {
+              "text": "A shadow within my own heart—doubt and fear whisper lies",
+              "scores": {"spirit.resilience": 2, "spirit.emotional_awareness": 2}
+            },
+            {
+              "text": "The winds of fate blow against me—forces beyond my sword's reach",
+              "scores": {"spirit.resilience": 2, "spirit.inner_peace": 1}
+            }
+          ]
+        },
+        {
+          "id": "change_readiness",
+          "text": "How ready are you to embark on a journey of transformation?",
+          "answers": [
+            {
+              "text": "I am fully committed—let the quest begin!",
+              "scores": {"mastery.dedication": 4, "mastery.discipline": 3, "spirit.resilience": 3}
+            },
+            {
+              "text": "I'm ready, but I'll need guidance and support",
+              "scores": {"mastery.dedication": 3, "bonds.community": 2, "spirit.resilience": 2}
+            },
+            {
+              "text": "I'm willing to try, though I have my doubts",
+              "scores": {"mastery.dedication": 2, "spirit.resilience": 2, "intellect.curiosity": 2}
+            },
+            {
+              "text": "I'm here to explore—no promises yet",
+              "scores": {"intellect.curiosity": 3, "spirit.inner_peace": 2}
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+

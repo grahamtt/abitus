@@ -161,7 +161,7 @@ class SettingsView(ft.Container):
                                             for v, label in time_options
                                         ],
                                         border_radius=10,
-                                        on_change=lambda e: self._update_setting(
+                                        on_select=lambda e: self._update_setting(
                                             "available_time_minutes", 
                                             int(e.control.value)
                                         ),
@@ -185,7 +185,7 @@ class SettingsView(ft.Container):
                                             for v, label in challenge_options
                                         ],
                                         border_radius=10,
-                                        on_change=lambda e: self._update_setting(
+                                        on_select=lambda e: self._update_setting(
                                             "challenge_level",
                                             int(e.control.value)
                                         ),

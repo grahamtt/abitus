@@ -18,10 +18,14 @@ from services.progression import ProgressionService
 from views.home import HomeView
 from views.character import CharacterView
 from views.quests import QuestsView
-from views.assessment import AssessmentView
+from views.interview import InterviewView
 from views.settings import SettingsView
 
 from components.achievement_badge import AchievementNotification
+
+
+# Feature flag: use new interview-based assessment
+USE_NEW_INTERVIEW = True
 
 
 class AbitusApp:
@@ -107,21 +111,40 @@ class AbitusApp:
             self.show_assessment()
     
     def show_assessment(self):
-        """Show the initial assessment flow."""
+        """Show the initial assessment/interview flow."""
         self.current_view = "assessment"
         
-        assessment = AssessmentView(
-            on_complete=self.on_assessment_complete,
-        )
+        if USE_NEW_INTERVIEW:
+            # Use new interview-based assessment
+            assessment = InterviewView(
+                on_complete=self.on_assessment_complete,
+            )
+        else:
+            # Use legacy slider-based assessment
+            from views.assessment import AssessmentView
+            assessment = AssessmentView(
+                on_complete=self.on_assessment_complete,
+            )
         
         self.page.clean()
-        self.page.add(assessment)
+        self.page.add(
+            ft.SafeArea(
+                content=assessment,
+                expand=True,
+            )
+        )
+        self.page.floating_action_button = None
         self.page.update()
     
     def on_assessment_complete(self, character: Character):
         """Handle assessment completion."""
         self.character = character
         self.storage.save_character(character)
+        
+        # Initialize default achievements if needed
+        if not self.achievements:
+            self.achievements = create_default_achievements()
+            self.storage.save_achievements(self.achievements)
         
         # Generate initial quests
         self.refresh_daily_quests()
@@ -222,9 +245,9 @@ class AbitusApp:
         
         self.page.clean()
         self.page.add(
-            ft.SafeArea(
+        ft.SafeArea(
                 content=settings_view,
-                expand=True,
+            expand=True,
             )
         )
         self.page.floating_action_button = None
@@ -410,24 +433,45 @@ class AbitusApp:
     
     def confirm_reset_data(self):
         """Show confirmation dialog for data reset."""
+        
         def close_dialog(e):
-            dialog.open = False
+            if dialog in self.page.overlay:
+                self.page.overlay.remove(dialog)
             self.page.update()
         
         def do_reset(e):
-            dialog.open = False
+            if dialog in self.page.overlay:
+                self.page.overlay.remove(dialog)
+            self.page.update()
             self.reset_all_data()
         
         dialog = ft.AlertDialog(
             modal=True,
-            title=ft.Text("Reset All Data?"),
-            content=ft.Text(
-                "This will permanently delete your character, quests, and achievements. This action cannot be undone."
+            open=True,
+            title=ft.Text("⚠️ Reset All Data?"),
+            content=ft.Column(
+                tight=True,
+                controls=[
+                    ft.Text(
+                        "This will permanently delete:",
+                    ),
+                    ft.Container(height=8),
+                    ft.Text("• Your character and all stats"),
+                    ft.Text("• All quest history"),
+                    ft.Text("• All achievements"),
+                    ft.Text("• Interview responses"),
+                    ft.Container(height=8),
+                    ft.Text(
+                        "You will need to complete the character assessment again.",
+                        italic=True,
+                        color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                    ),
+                ],
             ),
             actions=[
                 ft.TextButton("Cancel", on_click=close_dialog),
                 ft.FilledButton(
-                    "Reset",
+                    "Reset Everything",
                     bgcolor=ft.Colors.ERROR,
                     color=ft.Colors.WHITE,
                     on_click=do_reset,
@@ -437,15 +481,22 @@ class AbitusApp:
         )
         
         self.page.overlay.append(dialog)
-        dialog.open = True
         self.page.update()
     
     def reset_all_data(self):
-        """Reset all data and restart."""
+        """Reset all data and restart with assessment."""
+        # Clear all stored data
         self.storage.reset_all_data()
+        
+        # Clear in-memory data
         self.character = None
         self.achievements = []
         self.quests = []
+        
+        # Clear any overlays
+        self.page.overlay.clear()
+        
+        # Show assessment/interview
         self.show_assessment()
 
 
