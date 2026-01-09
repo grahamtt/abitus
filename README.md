@@ -158,9 +158,9 @@ Abitus embraces these principles:
 - [x] Basic quest system with daily quests
 - [x] Stat tracking and visualization
 - [x] Achievement system
-- [ ] Interview-style character assessment (natural questions instead of sliders)
-- [ ] Multi-faceted dimensions (sub-scores that aggregate into main stats)
-- [ ] Weekly and epic quest chains
+- [x] Interview-style character assessment (natural questions instead of sliders)
+- [x] Multi-faceted dimensions (sub-scores that aggregate into main stats)
+- [-] Weekly and epic quest chains
 - [ ] Cloud sync and backup
 - [ ] Social features (party quests, leaderboards)
 - [ ] Custom quest creation

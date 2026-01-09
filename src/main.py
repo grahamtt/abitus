@@ -14,12 +14,14 @@ from models.stats import StatType
 from services.storage import StorageService
 from services.quest_generator import QuestGenerator
 from services.progression import ProgressionService
+from services.journal import JournalService
 
 from views.home import HomeView
 from views.character import CharacterView
 from views.quests import QuestsView
 from views.interview import InterviewView
 from views.settings import SettingsView
+from views.journal import JournalView
 
 from components.achievement_badge import AchievementNotification
 
@@ -39,6 +41,7 @@ class AbitusApp:
         self.storage = StorageService()
         self.quest_generator = QuestGenerator()
         self.progression = ProgressionService()
+        self.journal_service = JournalService()
         
         # Load or initialize data
         self.character: Character | None = None
@@ -86,11 +89,30 @@ class AbitusApp:
         """Handle window resize."""
         self.page.update()
     
+    def _on_nav_change(self, e):
+        """Handle bottom navigation bar changes."""
+        index = e.control.selected_index
+        if index == 0:
+            self.show_home()
+        elif index == 1:
+            self.show_journal()
+        elif index == 2:
+            self.show_quests()
+        elif index == 3:
+            self.show_character()
+        elif index == 4:
+            self.show_settings()
+    
     def load_data(self):
         """Load all data from storage."""
         self.character = self.storage.load_character()
         self.achievements = self.storage.load_achievements()
         self.quests = self.storage.load_quests()
+        
+        # Load journal entries
+        journal_data = self.storage.load_journal()
+        if journal_data:
+            self.journal_service.load_entries(journal_data)
         
         # Check if we need to generate new daily quests
         if self.character and self.character.assessment_completed:
@@ -168,6 +190,7 @@ class AbitusApp:
             on_quest_abandon=self.abandon_quest,
             on_view_all_quests=self.show_quests,
             on_view_character=self.show_character,
+            on_write_entry=self.show_journal_for_quest,
         )
         
         self.page.clean()
@@ -177,11 +200,39 @@ class AbitusApp:
                 expand=True,
             )
         )
-        self.page.floating_action_button = ft.FloatingActionButton(
-            icon=ft.Icons.SETTINGS,
-            bgcolor="#6366f1",
-            on_click=lambda e: self.show_settings(),
+        # Add bottom navigation with Journal and Settings
+        self.page.navigation_bar = ft.NavigationBar(
+            destinations=[
+                ft.NavigationBarDestination(
+                    icon=ft.Icons.HOME_OUTLINED,
+                    selected_icon=ft.Icons.HOME,
+                    label="Home",
+                ),
+                ft.NavigationBarDestination(
+                    icon=ft.Icons.BOOK_OUTLINED,
+                    selected_icon=ft.Icons.BOOK,
+                    label="Journal",
+                ),
+                ft.NavigationBarDestination(
+                    icon=ft.Icons.ASSIGNMENT_OUTLINED,
+                    selected_icon=ft.Icons.ASSIGNMENT,
+                    label="Quests",
+                ),
+                ft.NavigationBarDestination(
+                    icon=ft.Icons.PERSON_OUTLINED,
+                    selected_icon=ft.Icons.PERSON,
+                    label="Character",
+                ),
+                ft.NavigationBarDestination(
+                    icon=ft.Icons.SETTINGS_OUTLINED,
+                    selected_icon=ft.Icons.SETTINGS,
+                    label="Settings",
+                ),
+            ],
+            selected_index=0,
+            on_change=self._on_nav_change,
         )
+        self.page.floating_action_button = None
         self.page.update()
     
     def show_character(self):
@@ -202,6 +253,8 @@ class AbitusApp:
             )
         )
         self.page.floating_action_button = None
+        if self.page.navigation_bar:
+            self.page.navigation_bar.selected_index = 3
         self.page.update()
     
     def show_quests(self):
@@ -220,6 +273,7 @@ class AbitusApp:
             on_quest_complete=self.complete_quest,
             on_quest_abandon=self.abandon_quest,
             on_back=self.show_home,
+            on_write_entry=self.show_journal_for_quest,
         )
         
         self.page.clean()
@@ -230,6 +284,8 @@ class AbitusApp:
             )
         )
         self.page.floating_action_button = None
+        if self.page.navigation_bar:
+            self.page.navigation_bar.selected_index = 2
         self.page.update()
     
     def show_settings(self):
@@ -245,13 +301,97 @@ class AbitusApp:
         
         self.page.clean()
         self.page.add(
-        ft.SafeArea(
+            ft.SafeArea(
                 content=settings_view,
+                expand=True,
+            )
+        )
+        self.page.floating_action_button = None
+        if self.page.navigation_bar:
+            self.page.navigation_bar.selected_index = 4
+        self.page.update()
+    
+    def show_journal(self, initial_entry_type=None):
+        """Show the journal view, optionally starting a new entry of a specific type."""
+        self.current_view = "journal"
+        
+        active_quests = [q for q in self.quests if q.status == QuestStatus.ACTIVE]
+        
+        journal_view = JournalView(
+            journal_service=self.journal_service,
+            active_quests=active_quests,
+            on_entry_saved=self.on_journal_entry_saved,
+            on_back=self.show_home,
+            initial_entry_type=initial_entry_type,
+        )
+        
+        self.page.clean()
+        self.page.add(
+        ft.SafeArea(
+                content=journal_view,
             expand=True,
             )
         )
         self.page.floating_action_button = None
+        if self.page.navigation_bar:
+            self.page.navigation_bar.selected_index = 1
         self.page.update()
+    
+    def show_journal_for_quest(self, quest: Quest):
+        """Open journal with the entry type needed to satisfy a quest."""
+        from models.journal import JournalEntryType
+        from models.quest import SatisfactionType
+        
+        # Map satisfaction types to journal entry types
+        satisfaction_to_entry = {
+            SatisfactionType.JOURNAL_ANY: JournalEntryType.FREE_FORM,
+            SatisfactionType.JOURNAL_GRATITUDE: JournalEntryType.GRATITUDE,
+            SatisfactionType.JOURNAL_REFLECTION: JournalEntryType.REFLECTION,
+            SatisfactionType.JOURNAL_EMOTION: JournalEntryType.EMOTION,
+            SatisfactionType.JOURNAL_GOAL: JournalEntryType.GOAL,
+            SatisfactionType.JOURNAL_LESSON: JournalEntryType.LESSON,
+        }
+        
+        entry_type = satisfaction_to_entry.get(quest.satisfied_by, JournalEntryType.FREE_FORM)
+        self.show_journal(initial_entry_type=entry_type)
+    
+    def on_journal_entry_saved(self, entry, satisfied_quests):
+        """Handle journal entry saved - complete any satisfied quests."""
+        for quest in satisfied_quests:
+            if quest.can_complete:
+                # Process completion through progression service
+                results = self.progression.complete_quest(
+                    self.character,
+                    quest,
+                    self.achievements
+                )
+                
+                # Save updates
+                self.storage.save_quest(quest)
+                self.storage.save_character(self.character)
+                
+                # Save any unlocked achievements
+                for achievement in results["achievements_unlocked"]:
+                    self.storage.save_achievement(achievement)
+                
+                # Show notifications
+                if results["levels_gained"]:
+                    self.show_level_up_notification(results["levels_gained"])
+                
+                for achievement in results["achievements_unlocked"]:
+                    self.show_achievement_notification(achievement)
+        
+        # Save journal entries
+        self.storage.save_journal(self.journal_service.save_entries())
+        
+        # Show completion message if any quests were satisfied
+        if satisfied_quests:
+            self.page.snack_bar = ft.SnackBar(
+                content=ft.Text(f"✨ Quest completed: {satisfied_quests[0].title}!"),
+                bgcolor=ft.Colors.GREEN_700,
+            )
+            self.page.snack_bar.open = True
+            self.page.update()
     
     def accept_quest(self, quest: Quest):
         """Accept a quest."""
@@ -351,6 +491,8 @@ class AbitusApp:
             self.show_character()
         elif self.current_view == "quests":
             self.show_quests()
+        elif self.current_view == "journal":
+            self.show_journal()
         elif self.current_view == "settings":
             self.show_settings()
     

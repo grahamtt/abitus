@@ -26,7 +26,20 @@
         "duration_minutes": 10,
         "xp_reward": 12,
         "difficulty": 1,
-        "subfacets": ["creativity", "knowledge"]
+        "subfacets": ["creativity", "knowledge"],
+        "satisfied_by": "journal_any",
+        "satisfaction_config": {"min_words": 15}
+      },
+      {
+        "title": "The Sage's Reflection",
+        "description": "Write about a lesson you learned recently",
+        "icon": "📖",
+        "duration_minutes": 10,
+        "xp_reward": 15,
+        "difficulty": 1,
+        "subfacets": ["knowledge", "learning"],
+        "satisfied_by": "journal_lesson",
+        "satisfaction_config": {"min_words": 20}
       },
       {
         "title": "Visions from the Oracle",
@@ -165,7 +178,9 @@
         "duration_minutes": 5,
         "xp_reward": 10,
         "difficulty": 1,
-        "subfacets": ["gratitude"]
+        "subfacets": ["gratitude"],
+        "satisfied_by": "journal_gratitude",
+        "satisfaction_config": {"min_items": 3}
       },
       {
         "title": "The Mirror of Reflection",
@@ -174,7 +189,9 @@
         "duration_minutes": 10,
         "xp_reward": 15,
         "difficulty": 2,
-        "subfacets": ["emotional_awareness", "mindfulness"]
+        "subfacets": ["emotional_awareness", "mindfulness"],
+        "satisfied_by": "journal_emotion",
+        "satisfaction_config": {"min_words": 30}
       },
       {
         "title": "Communion with the Grove",
@@ -220,6 +237,28 @@
         "xp_reward": 15,
         "difficulty": 2,
         "subfacets": ["resilience", "emotional_awareness"]
+      },
+      {
+        "title": "The Scribe's Solace",
+        "description": "Pour your heart onto the page—write freely about your feelings",
+        "icon": "💭",
+        "duration_minutes": 15,
+        "xp_reward": 18,
+        "difficulty": 2,
+        "subfacets": ["emotional_awareness", "inner_peace"],
+        "satisfied_by": "journal_emotion",
+        "satisfaction_config": {"min_words": 30}
+      },
+      {
+        "title": "The Druid's Ledger",
+        "description": "Reflect upon your day—what went well and what could improve",
+        "icon": "🌿",
+        "duration_minutes": 10,
+        "xp_reward": 15,
+        "difficulty": 2,
+        "subfacets": ["mindfulness", "resilience"],
+        "satisfied_by": "journal_reflection",
+        "satisfaction_config": {"min_words": 25}
       }
     ],
     "bonds": [
@@ -313,7 +352,9 @@
         "duration_minutes": 5,
         "xp_reward": 10,
         "difficulty": 1,
-        "subfacets": ["ambition", "career"]
+        "subfacets": ["ambition", "career"],
+        "satisfied_by": "journal_goal",
+        "satisfaction_config": {"min_words": 20}
       },
       {
         "title": "The Merchant's Ledger",
@@ -714,7 +755,9 @@
       "xp_reward": 15,
       "difficulty": 1,
       "subfacets": ["emotional_awareness", "mindfulness"],
-      "trigger": "evening"
+      "trigger": "evening",
+      "satisfied_by": "journal_reflection",
+      "satisfaction_config": {"min_words": 25}
     },
     {
       "title": "The Random Act of Nobility",

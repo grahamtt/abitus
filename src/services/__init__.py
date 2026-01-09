@@ -4,6 +4,7 @@ from .storage import StorageService
 from .quest_generator import QuestGenerator
 from .progression import ProgressionService
 from .interview import InterviewService, InterviewSession, InterviewData
+from .journal import JournalService
 
 __all__ = [
     "StorageService",
@@ -12,4 +13,5 @@ __all__ = [
     "InterviewService",
     "InterviewSession",
     "InterviewData",
+    "JournalService",
 ]

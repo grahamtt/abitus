@@ -1,7 +1,7 @@
 """Quests view with quest log and management."""
 
 import flet as ft
-from typing import Callable
+from typing import Callable, Optional
 from datetime import datetime
 
 from models.quest import Quest, QuestType, QuestStatus
@@ -21,6 +21,7 @@ class QuestsView(ft.Container):
         on_quest_complete: Callable[[Quest], None],
         on_quest_abandon: Callable[[Quest], None],
         on_back: Callable[[], None],
+        on_write_entry: Optional[Callable[[Quest], None]] = None,
     ):
         self.active_quests = active_quests
         self.available_quests = available_quests
@@ -29,6 +30,7 @@ class QuestsView(ft.Container):
         self.on_quest_complete = on_quest_complete
         self.on_quest_abandon = on_quest_abandon
         self.on_back = on_back
+        self.on_write_entry = on_write_entry
         
         self.current_tab = 0
         
@@ -157,6 +159,7 @@ class QuestsView(ft.Container):
                     quest=quest,
                     on_complete=lambda e, q=quest: self.on_quest_complete(q),
                     on_abandon=lambda e, q=quest: self.on_quest_abandon(q),
+                    on_write_entry=lambda e, q=quest: self.on_write_entry(q) if self.on_write_entry else None,
                 )
                 for quest in self.active_quests
             ],
@@ -313,7 +316,7 @@ class QuestsView(ft.Container):
                 ],
             ),
             expand=True,
-            alignment=ft.alignment.center,
+            alignment=ft.Alignment(0, 0),
         )
     
     def refresh(self, active_quests: list[Quest], available_quests: list[Quest],

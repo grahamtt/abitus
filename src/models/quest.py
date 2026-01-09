@@ -27,6 +27,37 @@ class QuestStatus(Enum):
     LOCKED = "locked"         # Not yet unlocked
 
 
+class SatisfactionType(Enum):
+    """How a quest can be satisfied/completed."""
+    MANUAL = "manual"                      # User marks complete manually
+    
+    # Journal-based satisfaction
+    JOURNAL_ANY = "journal_any"            # Any journal entry
+    JOURNAL_GRATITUDE = "journal_gratitude"  # Gratitude entry
+    JOURNAL_REFLECTION = "journal_reflection"  # Reflection entry
+    JOURNAL_EMOTION = "journal_emotion"    # Emotional check-in entry
+    JOURNAL_GOAL = "journal_goal"          # Goal setting entry
+    JOURNAL_LESSON = "journal_lesson"      # Lesson learned entry
+    
+    # Future app integrations
+    APP_DUOLINGO = "app_duolingo"          # Duolingo lesson completion
+    APP_STRAVA = "app_strava"              # Strava activity
+    APP_FITBIT = "app_fitbit"              # Fitbit activity
+    APP_HEADSPACE = "app_headspace"        # Headspace meditation
+    APP_CUSTOM = "app_custom"              # Custom webhook/API
+
+
+# Mapping of journal entry types to satisfaction types
+JOURNAL_SATISFACTION_MAP = {
+    "free_form": SatisfactionType.JOURNAL_ANY,
+    "gratitude": SatisfactionType.JOURNAL_GRATITUDE,
+    "reflection": SatisfactionType.JOURNAL_REFLECTION,
+    "emotion": SatisfactionType.JOURNAL_EMOTION,
+    "goal": SatisfactionType.JOURNAL_GOAL,
+    "lesson": SatisfactionType.JOURNAL_LESSON,
+}
+
+
 @dataclass
 class Quest:
     """A quest that rewards XP for completion."""
@@ -66,6 +97,10 @@ class Quest:
     chain_id: Optional[str] = None
     chain_order: int = 0
     prerequisite_quest_id: Optional[str] = None
+    
+    # Satisfaction/auto-completion
+    satisfied_by: SatisfactionType = SatisfactionType.MANUAL
+    satisfaction_config: dict = field(default_factory=dict)  # e.g., {"min_words": 50}
     
     @property
     def is_expired(self) -> bool:
@@ -108,6 +143,56 @@ class Quest:
     def difficulty_stars(self) -> str:
         """Visual difficulty representation."""
         return "★" * self.difficulty + "☆" * (5 - self.difficulty)
+    
+    @property
+    def is_auto_completable(self) -> bool:
+        """Check if this quest can be auto-completed by some action."""
+        return self.satisfied_by != SatisfactionType.MANUAL
+    
+    @property
+    def requires_journal(self) -> bool:
+        """Check if this quest is satisfied by a journal entry."""
+        return self.satisfied_by.value.startswith("journal_")
+    
+    @property
+    def satisfaction_description(self) -> str:
+        """Human-readable description of how to satisfy this quest."""
+        descriptions = {
+            SatisfactionType.MANUAL: "Mark as complete when done",
+            SatisfactionType.JOURNAL_ANY: "Write a journal entry",
+            SatisfactionType.JOURNAL_GRATITUDE: "Write a gratitude entry",
+            SatisfactionType.JOURNAL_REFLECTION: "Write a reflection",
+            SatisfactionType.JOURNAL_EMOTION: "Write an emotional check-in",
+            SatisfactionType.JOURNAL_GOAL: "Set a goal in your journal",
+            SatisfactionType.JOURNAL_LESSON: "Record a lesson learned",
+            SatisfactionType.APP_DUOLINGO: "Complete a Duolingo lesson",
+            SatisfactionType.APP_STRAVA: "Log a Strava activity",
+            SatisfactionType.APP_FITBIT: "Log Fitbit activity",
+            SatisfactionType.APP_HEADSPACE: "Complete a Headspace session",
+            SatisfactionType.APP_CUSTOM: "Via connected app",
+        }
+        desc = descriptions.get(self.satisfied_by, "Complete the task")
+        
+        # Add config requirements if any
+        if min_words := self.satisfaction_config.get("min_words"):
+            desc += f" (min {min_words} words)"
+        if min_items := self.satisfaction_config.get("min_items"):
+            desc += f" (at least {min_items} items)"
+        
+        return desc
+    
+    def can_be_satisfied_by_journal(self, entry_type: str) -> bool:
+        """Check if a journal entry of the given type would satisfy this quest."""
+        if self.satisfied_by == SatisfactionType.MANUAL:
+            return False
+        
+        # JOURNAL_ANY accepts any journal entry
+        if self.satisfied_by == SatisfactionType.JOURNAL_ANY:
+            return True
+        
+        # Check specific type match
+        expected_type = JOURNAL_SATISFACTION_MAP.get(entry_type)
+        return expected_type == self.satisfied_by
     
     def accept(self) -> bool:
         """Accept the quest."""
@@ -175,6 +260,8 @@ class Quest:
             "chain_id": self.chain_id,
             "chain_order": self.chain_order,
             "prerequisite_quest_id": self.prerequisite_quest_id,
+            "satisfied_by": self.satisfied_by.value,
+            "satisfaction_config": self.satisfaction_config,
         }
     
     @classmethod
@@ -191,6 +278,12 @@ class Quest:
                 subfacets.append(SubFacetType(sf_value))
             except ValueError:
                 pass  # Skip invalid subfacet values
+        
+        # Parse satisfaction type
+        try:
+            satisfied_by = SatisfactionType(data.get("satisfied_by", "manual"))
+        except ValueError:
+            satisfied_by = SatisfactionType.MANUAL
         
         return cls(
             id=data.get("id", str(uuid.uuid4())),
@@ -215,5 +308,7 @@ class Quest:
             chain_id=data.get("chain_id"),
             chain_order=data.get("chain_order", 0),
             prerequisite_quest_id=data.get("prerequisite_quest_id"),
+            satisfied_by=satisfied_by,
+            satisfaction_config=data.get("satisfaction_config", {}),
         )
 

@@ -14,8 +14,9 @@ from .stats import (
     parse_score_key,
 )
 from .character import Character
-from .quest import Quest, QuestType, QuestStatus
+from .quest import Quest, QuestType, QuestStatus, SatisfactionType, JOURNAL_SATISFACTION_MAP
 from .achievement import Achievement, AchievementType
+from .journal import JournalEntry, JournalEntryType, ENTRY_PROMPTS, get_random_prompt
 
 __all__ = [
     # Stats
@@ -37,7 +38,14 @@ __all__ = [
     "Quest",
     "QuestType",
     "QuestStatus",
+    "SatisfactionType",
+    "JOURNAL_SATISFACTION_MAP",
     # Achievement
     "Achievement",
     "AchievementType",
+    # Journal
+    "JournalEntry",
+    "JournalEntryType",
+    "ENTRY_PROMPTS",
+    "get_random_prompt",
 ]

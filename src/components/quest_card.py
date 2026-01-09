@@ -14,12 +14,14 @@ class QuestCard(ft.Container):
         on_accept=None,
         on_complete=None,
         on_abandon=None,
+        on_write_entry=None,  # For journal-satisfiable quests
         expanded: bool = False,
     ):
         self.quest = quest
         self._on_accept = on_accept
         self._on_complete = on_complete
         self._on_abandon = on_abandon
+        self._on_write_entry = on_write_entry
         self.expanded = expanded
         
         # Get stat color for theming
@@ -199,27 +201,49 @@ class QuestCard(ft.Container):
             )
         
         elif quest.status == QuestStatus.ACTIVE:
-            return ft.Row(
-                alignment=ft.MainAxisAlignment.END,
-                spacing=8,
-                controls=[
-                    ft.TextButton(
-                        content=ft.Text("Abandon", color=ft.Colors.ERROR),
-                        on_click=self._on_abandon,
-                    ),
+            buttons = [
+                ft.TextButton(
+                    content=ft.Text("Abandon", color=ft.Colors.ERROR),
+                    on_click=self._on_abandon,
+                ),
+            ]
+            
+            # Add "Write Entry" button for journal-satisfiable quests
+            if quest.requires_journal and self._on_write_entry:
+                buttons.append(
                     ft.FilledButton(
                         content=ft.Row(
                             spacing=6,
                             controls=[
-                                ft.Icon(ft.Icons.CHECK, size=18),
-                                ft.Text("Complete", weight=ft.FontWeight.W_500),
+                                ft.Icon(ft.Icons.EDIT_NOTE, size=18),
+                                ft.Text("Write Entry", weight=ft.FontWeight.W_500),
                             ],
                         ),
-                        bgcolor="#22c55e",
+                        bgcolor="#6366f1",
                         color=ft.Colors.WHITE,
-                        on_click=self._on_complete,
+                        on_click=self._on_write_entry,
                     ),
-                ],
+                )
+            
+            buttons.append(
+                ft.FilledButton(
+                    content=ft.Row(
+                        spacing=6,
+                        controls=[
+                            ft.Icon(ft.Icons.CHECK, size=18),
+                            ft.Text("Complete", weight=ft.FontWeight.W_500),
+                        ],
+                    ),
+                    bgcolor="#22c55e",
+                    color=ft.Colors.WHITE,
+                    on_click=self._on_complete,
+                ),
+            )
+            
+            return ft.Row(
+                alignment=ft.MainAxisAlignment.END,
+                spacing=8,
+                controls=buttons,
             )
         
         elif quest.status == QuestStatus.COMPLETED:

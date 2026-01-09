@@ -6,6 +6,7 @@ from .quests import QuestsView
 from .assessment import AssessmentView
 from .interview import InterviewView
 from .settings import SettingsView
+from .journal import JournalView
 
 __all__ = [
     "HomeView",
@@ -14,4 +15,5 @@ __all__ = [
     "AssessmentView",
     "InterviewView",
     "SettingsView",
+    "JournalView",
 ]

@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Optional
 
 from models.character import Character
-from models.quest import Quest, QuestType, QuestStatus
+from models.quest import Quest, QuestType, QuestStatus, SatisfactionType
 from models.stats import StatType, SubFacetType, STAT_DEFINITIONS
 
 
@@ -39,6 +39,17 @@ class QuestGenerator:
             except ValueError:
                 pass  # Skip invalid subfacet names
         return result
+    
+    def _parse_satisfaction(self, template: dict) -> tuple[SatisfactionType, dict]:
+        """Parse satisfaction type and config from template."""
+        satisfied_by_str = template.get("satisfied_by", "manual")
+        try:
+            satisfied_by = SatisfactionType(satisfied_by_str)
+        except ValueError:
+            satisfied_by = SatisfactionType.MANUAL
+        
+        satisfaction_config = template.get("satisfaction_config", {})
+        return satisfied_by, satisfaction_config
     
     def generate_daily_quests(self, character: Character, count: int = 5) -> list[Quest]:
         """Generate a set of daily quests for the character."""
@@ -84,6 +95,7 @@ class QuestGenerator:
             if available:
                 template = random.choice(available)
                 used_templates.add((stat_name, template["title"]))
+                satisfied_by, satisfaction_config = self._parse_satisfaction(template)
                 
                 quest = Quest(
                     title=template["title"],
@@ -98,6 +110,8 @@ class QuestGenerator:
                     difficulty=template.get("difficulty", 1),
                     is_recurring=True,
                     expires_at=datetime.now() + timedelta(days=1),
+                    satisfied_by=satisfied_by,
+                    satisfaction_config=satisfaction_config,
                 )
                 quests.append(quest)
         
@@ -121,6 +135,7 @@ class QuestGenerator:
             matching = weekly_templates
         
         template = random.choice(matching)
+        satisfied_by, satisfaction_config = self._parse_satisfaction(template)
         
         return Quest(
             title=template["title"],
@@ -135,6 +150,8 @@ class QuestGenerator:
             difficulty=template.get("difficulty", 3),
             is_recurring=False,
             expires_at=datetime.now() + timedelta(days=7),
+            satisfied_by=satisfied_by,
+            satisfaction_config=satisfaction_config,
         )
     
     def generate_epic_quest(self, character: Character) -> Optional[Quest]:
@@ -155,6 +172,7 @@ class QuestGenerator:
             matching = epic_templates
         
         template = random.choice(matching)
+        satisfied_by, satisfaction_config = self._parse_satisfaction(template)
         
         return Quest(
             title=template["title"],
@@ -169,6 +187,8 @@ class QuestGenerator:
             difficulty=template.get("difficulty", 4),
             is_recurring=False,
             expires_at=datetime.now() + timedelta(days=30),
+            satisfied_by=satisfied_by,
+            satisfaction_config=satisfaction_config,
         )
     
     def generate_random_encounter(self, character: Character) -> Quest:
@@ -205,6 +225,7 @@ class QuestGenerator:
             )
         
         template = random.choice(available)
+        satisfied_by, satisfaction_config = self._parse_satisfaction(template)
         
         # Bonus XP for random encounters
         base_xp = template.get("xp_reward", 10)
@@ -223,6 +244,8 @@ class QuestGenerator:
             difficulty=template.get("difficulty", 1),
             is_recurring=False,
             expires_at=datetime.now() + timedelta(hours=4),  # Short expiry
+            satisfied_by=satisfied_by,
+            satisfaction_config=satisfaction_config,
         )
     
     def generate_special_quest(self, trigger: str = "random") -> Optional[Quest]:
@@ -238,6 +261,7 @@ class QuestGenerator:
             return None
         
         template = random.choice(matching)
+        satisfied_by, satisfaction_config = self._parse_satisfaction(template)
         
         return Quest(
             title=template["title"],
@@ -252,6 +276,8 @@ class QuestGenerator:
             difficulty=template.get("difficulty", 2),
             is_recurring=False,
             expires_at=datetime.now() + timedelta(days=1),
+            satisfied_by=satisfied_by,
+            satisfaction_config=satisfaction_config,
         )
     
     def _calculate_stat_priorities(self, character: Character) -> dict[StatType, float]:

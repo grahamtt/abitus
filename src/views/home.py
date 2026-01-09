@@ -24,6 +24,7 @@ class HomeView(ft.Container):
         on_quest_abandon: Callable[[Quest], None],
         on_view_all_quests: Callable[[], None],
         on_view_character: Callable[[], None],
+        on_write_entry: Optional[Callable[[Quest], None]] = None,
     ):
         self.character = character
         self.active_quests = active_quests
@@ -33,6 +34,7 @@ class HomeView(ft.Container):
         self.on_quest_abandon = on_quest_abandon
         self.on_view_all_quests = on_view_all_quests
         self.on_view_character = on_view_character
+        self.on_write_entry = on_write_entry
         
         super().__init__(
             content=self._build_content(),
@@ -261,6 +263,7 @@ class HomeView(ft.Container):
                         quest=quest,
                         on_complete=lambda e, q=quest: self.on_quest_complete(q),
                         on_abandon=lambda e, q=quest: self.on_quest_abandon(q),
+                        on_write_entry=lambda e, q=quest: self.on_write_entry(q) if self.on_write_entry else None,
                     )
                     for quest in self.active_quests[:3]  # Show max 3
                 ],

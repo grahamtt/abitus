@@ -78,6 +78,15 @@ class StorageService:
             )
         """)
         
+        # Journal table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS journal (
+                id TEXT PRIMARY KEY,
+                data TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            )
+        """)
+        
         conn.commit()
         conn.close()
     
@@ -336,7 +345,41 @@ class StorageService:
         cursor.execute("DELETE FROM quests")
         cursor.execute("DELETE FROM achievements")
         cursor.execute("DELETE FROM settings")
+        cursor.execute("DELETE FROM journal")
         
         conn.commit()
         conn.close()
+    
+    # Journal methods
+    def save_journal(self, entries_data: list[dict]):
+        """Save all journal entries (replaces existing)."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        
+        # Clear existing entries and save new ones
+        cursor.execute("DELETE FROM journal")
+        
+        now = datetime.now().isoformat()
+        data = json.dumps(entries_data)
+        
+        cursor.execute("""
+            INSERT INTO journal (id, data, updated_at)
+            VALUES (?, ?, ?)
+        """, ("journal_data", data, now))
+        
+        conn.commit()
+        conn.close()
+    
+    def load_journal(self) -> list[dict]:
+        """Load all journal entries."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT data FROM journal WHERE id = 'journal_data'")
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row:
+            return json.loads(row["data"])
+        return []
 
