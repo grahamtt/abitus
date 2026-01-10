@@ -98,6 +98,12 @@ class Quest:
     chain_order: int = 0
     prerequisite_quest_id: Optional[str] = None
     
+    # Custom quest fields
+    is_custom: bool = False  # True for user-created quests
+    weekly_target: int = 0  # Target completions per week (e.g., 3 for "3 times a week")
+    weekly_completions: int = 0  # Current week's completion count
+    week_start_date: Optional[datetime] = None  # Start of current tracking week
+    
     # Satisfaction/auto-completion
     satisfied_by: SatisfactionType = SatisfactionType.MANUAL
     satisfaction_config: dict = field(default_factory=dict)  # e.g., {"min_words": 50}
@@ -273,6 +279,57 @@ class Quest:
             self.accepted_at = None
             self.completed_at = None
     
+    def check_weekly_reset(self):
+        """Check if we need to reset the weekly counter for a custom quest."""
+        if not self.is_custom or self.weekly_target <= 0:
+            return
+        
+        now = datetime.now()
+        
+        # If no week start date, initialize it
+        if not self.week_start_date:
+            # Start week on Monday
+            days_since_monday = now.weekday()
+            self.week_start_date = (now - timedelta(days=days_since_monday)).replace(
+                hour=0, minute=0, second=0, microsecond=0
+            )
+            return
+        
+        # Check if a week has passed
+        week_end = self.week_start_date + timedelta(days=7)
+        if now >= week_end:
+            # Reset for new week
+            days_since_monday = now.weekday()
+            self.week_start_date = (now - timedelta(days=days_since_monday)).replace(
+                hour=0, minute=0, second=0, microsecond=0
+            )
+            self.weekly_completions = 0
+            # Reset status so it can be done again
+            if self.status == QuestStatus.COMPLETED:
+                self.status = QuestStatus.AVAILABLE
+                self.accepted_at = None
+                self.completed_at = None
+    
+    @property
+    def weekly_progress_display(self) -> str:
+        """Display string for weekly completion progress."""
+        if not self.is_custom or self.weekly_target <= 0:
+            return ""
+        return f"{self.weekly_completions}/{self.weekly_target} this week"
+    
+    @property
+    def weekly_target_met(self) -> bool:
+        """Check if weekly target has been met."""
+        if not self.is_custom or self.weekly_target <= 0:
+            return False
+        return self.weekly_completions >= self.weekly_target
+    
+    def record_weekly_completion(self):
+        """Record a completion for weekly tracking."""
+        if self.is_custom and self.weekly_target > 0:
+            self.check_weekly_reset()  # Ensure week is current
+            self.weekly_completions += 1
+    
     def to_dict(self) -> dict:
         """Serialize to dictionary."""
         return {
@@ -304,6 +361,10 @@ class Quest:
             "progress_target": self.progress_target,
             "progress_current": self.progress_current,
             "progress_unit": self.progress_unit,
+            "is_custom": self.is_custom,
+            "weekly_target": self.weekly_target,
+            "weekly_completions": self.weekly_completions,
+            "week_start_date": self.week_start_date.isoformat() if self.week_start_date else None,
         }
     
     @classmethod
@@ -356,5 +417,9 @@ class Quest:
             progress_target=data.get("progress_target", 0),
             progress_current=data.get("progress_current", 0),
             progress_unit=data.get("progress_unit", "minutes"),
+            is_custom=data.get("is_custom", False),
+            weekly_target=data.get("weekly_target", 0),
+            weekly_completions=data.get("weekly_completions", 0),
+            week_start_date=datetime.fromisoformat(data["week_start_date"]) if data.get("week_start_date") else None,
         )
 

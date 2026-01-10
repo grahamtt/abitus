@@ -6,8 +6,9 @@ Main application entry point.
 import flet as ft
 from datetime import datetime, timedelta
 
+from utils.compat import colors, icons
 from models.character import Character
-from models.quest import Quest, QuestStatus
+from models.quest import Quest, QuestStatus, SatisfactionType
 from models.achievement import Achievement, create_default_achievements
 from models.stats import StatType
 
@@ -22,6 +23,7 @@ from views.quests import QuestsView
 from views.interview import InterviewView
 from views.settings import SettingsView
 from views.journal import JournalView
+from views.custom_quest import CustomQuestView
 
 from components.achievement_badge import AchievementNotification
 
@@ -70,8 +72,7 @@ class AbitusApp:
                 primary="#6366f1",
                 secondary="#a855f7",
                 surface="#1a1a2e",
-                surface_container_highest="#252542",
-                surface_container_high="#1f1f38",
+                background="#1a1a2e",
                 on_surface="#e2e8f0",
                 on_primary="#ffffff",
                 error="#ef4444",
@@ -205,28 +206,28 @@ class AbitusApp:
         self.page.navigation_bar = ft.NavigationBar(
             destinations=[
                 ft.NavigationBarDestination(
-                    icon=ft.Icons.HOME_OUTLINED,
-                    selected_icon=ft.Icons.HOME,
+                    icon=icons.HOME_OUTLINED,
+                    selected_icon=icons.HOME,
                     label="Home",
                 ),
                 ft.NavigationBarDestination(
-                    icon=ft.Icons.BOOK_OUTLINED,
-                    selected_icon=ft.Icons.BOOK,
+                    icon=icons.BOOK_OUTLINED,
+                    selected_icon=icons.BOOK,
                     label="Journal",
                 ),
                 ft.NavigationBarDestination(
-                    icon=ft.Icons.ASSIGNMENT_OUTLINED,
-                    selected_icon=ft.Icons.ASSIGNMENT,
+                    icon=icons.ASSIGNMENT_OUTLINED,
+                    selected_icon=icons.ASSIGNMENT,
                     label="Quests",
                 ),
                 ft.NavigationBarDestination(
-                    icon=ft.Icons.PERSON_OUTLINED,
-                    selected_icon=ft.Icons.PERSON,
+                    icon=icons.PERSON_OUTLINED,
+                    selected_icon=icons.PERSON,
                     label="Character",
                 ),
                 ft.NavigationBarDestination(
-                    icon=ft.Icons.SETTINGS_OUTLINED,
-                    selected_icon=ft.Icons.SETTINGS,
+                    icon=icons.SETTINGS_OUTLINED,
+                    selected_icon=icons.SETTINGS,
                     label="Settings",
                 ),
             ],
@@ -262,6 +263,12 @@ class AbitusApp:
         """Show the quest log."""
         self.current_view = "quests"
         
+        # Check weekly resets for custom quests
+        for quest in self.quests:
+            if quest.is_custom:
+                quest.check_weekly_reset()
+                self.storage.save_quest(quest)
+        
         active = [q for q in self.quests if q.status == QuestStatus.ACTIVE]
         available = [q for q in self.quests if q.status == QuestStatus.AVAILABLE]
         completed = [q for q in self.quests if q.status == QuestStatus.COMPLETED]
@@ -276,6 +283,8 @@ class AbitusApp:
             on_back=self.show_home,
             on_write_entry=self.show_journal_for_quest,
             on_log_progress=self.show_log_progress_dialog,
+            on_create_custom_quest=self.show_create_custom_quest,
+            on_edit_custom_quest=self.show_edit_custom_quest,
         )
         
         self.page.clean()
@@ -289,6 +298,89 @@ class AbitusApp:
         if self.page.navigation_bar:
             self.page.navigation_bar.selected_index = 2
         self.page.update()
+    
+    def show_create_custom_quest(self):
+        """Show the custom quest creation view."""
+        self.current_view = "create_custom_quest"
+        
+        custom_quest_view = CustomQuestView(
+            on_save=self.save_custom_quest,
+            on_cancel=self.show_quests,
+        )
+        
+        self.page.clean()
+        self.page.add(
+            ft.SafeArea(
+                content=custom_quest_view,
+                expand=True,
+            )
+        )
+        self.page.navigation_bar = None
+        self.page.update()
+    
+    def show_edit_custom_quest(self, quest: Quest):
+        """Show the custom quest edit view."""
+        self.current_view = "edit_custom_quest"
+        
+        custom_quest_view = CustomQuestView(
+            on_save=self.save_custom_quest,
+            on_cancel=self.show_quests,
+            on_delete=self.delete_custom_quest,
+            existing_quest=quest,
+        )
+        
+        self.page.clean()
+        self.page.add(
+            ft.SafeArea(
+                content=custom_quest_view,
+                expand=True,
+            )
+        )
+        self.page.navigation_bar = None
+        self.page.update()
+    
+    def save_custom_quest(self, quest: Quest):
+        """Save a new or edited custom quest."""
+        # Check if it's a new quest (not in our list)
+        existing = next((q for q in self.quests if q.id == quest.id), None)
+        
+        if existing:
+            # Update existing quest in list
+            idx = self.quests.index(existing)
+            self.quests[idx] = quest
+        else:
+            # Add new quest
+            self.quests.append(quest)
+        
+        # Save to storage
+        self.storage.save_quest(quest)
+        
+        # Show success message
+        self.page.snack_bar = ft.SnackBar(
+            content=ft.Text(f"✨ Quest '{quest.title}' saved!"),
+            bgcolor="#22c55e",
+        )
+        self.page.snack_bar.open = True
+        
+        # Go back to quests view
+        self.show_quests()
+    
+    def delete_custom_quest(self, quest: Quest):
+        """Delete a custom quest."""
+        # Remove from list
+        self.quests = [q for q in self.quests if q.id != quest.id]
+        
+        # Remove from storage
+        self.storage.delete_quest(quest.id)
+        
+        # Show message
+        self.page.snack_bar = ft.SnackBar(
+            content=ft.Text(f"Quest '{quest.title}' deleted"),
+        )
+        self.page.snack_bar.open = True
+        
+        # Go back to quests view
+        self.show_quests()
     
     def show_settings(self):
         """Show settings view."""
@@ -313,7 +405,7 @@ class AbitusApp:
             self.page.navigation_bar.selected_index = 4
         self.page.update()
     
-    def show_journal(self, initial_entry_type=None):
+    def show_journal(self, initial_entry_type=None, completed_quest_context=None):
         """Show the journal view, optionally starting a new entry of a specific type."""
         self.current_view = "journal"
         
@@ -325,6 +417,7 @@ class AbitusApp:
             on_entry_saved=self.on_journal_entry_saved,
             on_back=self.show_home,
             initial_entry_type=initial_entry_type,
+            completed_quest_context=completed_quest_context,
         )
         
         self.page.clean()
@@ -390,7 +483,7 @@ class AbitusApp:
         if satisfied_quests:
             self.page.snack_bar = ft.SnackBar(
                 content=ft.Text(f"✨ Quest completed: {satisfied_quests[0].title}!"),
-                bgcolor=ft.Colors.GREEN_700,
+                bgcolor=colors.GREEN_700,
             )
             self.page.snack_bar.open = True
             self.page.update()
@@ -413,6 +506,16 @@ class AbitusApp:
             self.achievements
         )
         
+        # Handle custom quest weekly tracking
+        if quest.is_custom and quest.weekly_target > 0:
+            quest.record_weekly_completion()
+            
+            # Reset quest to available for repeated completion (until weekly target met)
+            if not quest.weekly_target_met:
+                quest.status = QuestStatus.AVAILABLE
+                quest.accepted_at = None
+                quest.completed_at = None
+        
         # Save updates
         self.storage.save_quest(quest)
         self.storage.save_character(self.character)
@@ -429,6 +532,25 @@ class AbitusApp:
         for achievement in results["achievements_unlocked"]:
             self.show_achievement_notification(achievement)
         
+        # For manual quests, offer to log what was done
+        if quest.satisfied_by == SatisfactionType.MANUAL and not quest.is_custom:
+            self._show_log_completion_dialog(quest)
+            return  # Don't refresh view yet - dialog will handle it
+        
+        # Show weekly progress for custom quests
+        if quest.is_custom and quest.weekly_target > 0:
+            if quest.weekly_target_met:
+                self.page.snack_bar = ft.SnackBar(
+                    content=ft.Text(f"🎯 Weekly goal met! You did '{quest.title}' {quest.weekly_target} times!"),
+                    bgcolor="#22c55e",
+                )
+            else:
+                self.page.snack_bar = ft.SnackBar(
+                    content=ft.Text(f"✨ {quest.weekly_progress_display}"),
+                    bgcolor="#6366f1",
+                )
+            self.page.snack_bar.open = True
+        
         # Refresh view
         self.refresh_current_view()
     
@@ -437,6 +559,88 @@ class AbitusApp:
         quest.abandon()
         self.storage.save_quest(quest)
         self.refresh_current_view()
+    
+    def _show_log_completion_dialog(self, quest: Quest):
+        """Show a dialog offering to log what was done for a completed quest."""
+        from models.journal import JournalEntryType
+        
+        def close_and_refresh(e=None):
+            dialog.open = False
+            self.page.update()
+            self.refresh_current_view()
+        
+        def log_in_journal(e):
+            dialog.open = False
+            self.page.update()
+            # Navigate to journal with quest context
+            self._show_journal_for_completed_quest(quest)
+        
+        dialog = ft.AlertDialog(
+            modal=True,
+            title=ft.Row(
+                spacing=8,
+                controls=[
+                    ft.Text("✨", size=24),
+                    ft.Text("Quest Complete!", weight=ft.FontWeight.W_600),
+                ],
+            ),
+            content=ft.Column(
+                tight=True,
+                spacing=12,
+                controls=[
+                    ft.Text(
+                        f"You completed: {quest.title}",
+                        size=14,
+                    ),
+                    ft.Text(
+                        f"+{quest.xp_reward} XP earned!",
+                        size=16,
+                        weight=ft.FontWeight.W_600,
+                        color="#f59e0b",
+                    ),
+                    ft.Divider(),
+                    ft.Text(
+                        "Would you like to write about what you did?",
+                        size=13,
+                        color=colors.with_opacity(0.8, colors.ON_SURFACE),
+                    ),
+                    ft.Text(
+                        "Recording your activities helps track your journey.",
+                        size=12,
+                        color=colors.with_opacity(0.6, colors.ON_SURFACE),
+                        italic=True,
+                    ),
+                ],
+            ),
+            actions=[
+                ft.TextButton("Skip", on_click=close_and_refresh),
+                ft.ElevatedButton(
+                    content=ft.Row(
+                        spacing=6,
+                        controls=[
+                            ft.Icon(icons.EDIT_NOTE, size=18),
+                            ft.Text("Write Entry"),
+                        ],
+                    ),
+                    on_click=log_in_journal,
+                ),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+            open=False,
+        )
+        
+        self.page.dialog = dialog
+        dialog.open = True
+        self.page.update()
+    
+    def _show_journal_for_completed_quest(self, quest: Quest):
+        """Open journal with context pre-filled for a completed quest."""
+        from models.journal import JournalEntryType
+        
+        self.show_journal(
+            initial_entry_type=JournalEntryType.LESSON,
+            completed_quest_context=quest,
+        )
     
     def show_log_progress_dialog(self, quest: Quest):
         """Show a dialog to log incremental progress for a quest."""
@@ -456,9 +660,7 @@ class AbitusApp:
         quick_amounts = [5, 10, 15, 30] if "minute" in quest.progress_unit.lower() else [1, 2, 5]
         
         def close_dialog(e=None):
-            if dialog in self.page.overlay:
-                dialog.open = False
-                self.page.overlay.remove(dialog)
+            dialog.open = False
             self.page.update()
         
         def add_progress(amount: float):
@@ -468,7 +670,9 @@ class AbitusApp:
             # Save the updated quest
             self.storage.save_quest(quest)
             
-            close_dialog()
+            # Close dialog first
+            dialog.open = False
+            self.page.update()
             
             # If target reached, show a notification
             if target_reached:
@@ -496,7 +700,6 @@ class AbitusApp:
         
         dialog = ft.AlertDialog(
             modal=True,
-            open=True,
             title=ft.Text(f"📝 Log Progress"),
             content=ft.Column(
                 tight=True,
@@ -508,14 +711,14 @@ class AbitusApp:
                     ),
                     ft.Text(
                         f"Current: {quest.progress_display}",
-                        color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.7, colors.ON_SURFACE),
                     ),
                     # Progress bar
                     ft.Container(
                         content=ft.ProgressBar(
                             value=quest.progress_percentage / 100,
                             color="#22c55e",
-                            bgcolor=ft.Colors.with_opacity(0.2, ft.Colors.ON_SURFACE),
+                            bgcolor=colors.with_opacity(0.2, colors.ON_SURFACE),
                         ),
                         height=8,
                         border_radius=4,
@@ -525,14 +728,14 @@ class AbitusApp:
                     ft.Text(
                         "Quick add:",
                         size=12,
-                        color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.6, colors.ON_SURFACE),
                     ),
                     ft.Row(
                         spacing=8,
                         wrap=True,
                         controls=[
-                            ft.FilledTonalButton(
-                                text=f"+{amt}",
+                            ft.OutlinedButton(
+                                f"+{amt}",
                                 on_click=lambda e, a=amt: add_progress(a),
                             )
                             for amt in quick_amounts
@@ -543,22 +746,24 @@ class AbitusApp:
                     ft.Text(
                         "Or enter custom amount:",
                         size=12,
-                        color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.6, colors.ON_SURFACE),
                     ),
                     amount_field,
                 ],
             ),
             actions=[
                 ft.TextButton("Cancel", on_click=close_dialog),
-                ft.FilledButton(
+                ft.ElevatedButton(
                     "Log Progress",
                     on_click=log_custom_amount,
                 ),
             ],
             actions_alignment=ft.MainAxisAlignment.END,
+            open=False,
         )
         
-        self.page.overlay.append(dialog)
+        self.page.dialog = dialog
+        dialog.open = True
         self.page.update()
     
     def refresh_daily_quests(self):
@@ -640,12 +845,12 @@ class AbitusApp:
                                 ft.Text(
                                     "Level Up!",
                                     weight=ft.FontWeight.BOLD,
-                                    color=ft.Colors.WHITE,
+                                    color=colors.WHITE,
                                 ),
                                 ft.Text(
                                     f"{stat_def.name} is now Level {new_level}!",
                                     size=13,
-                                    color=ft.Colors.with_opacity(0.9, ft.Colors.WHITE),
+                                    color=colors.with_opacity(0.9, colors.WHITE),
                                 ),
                             ],
                         ),
@@ -670,12 +875,12 @@ class AbitusApp:
                             ft.Text(
                                 "Achievement Unlocked!",
                                 weight=ft.FontWeight.BOLD,
-                                color=ft.Colors.WHITE,
+                                color=colors.WHITE,
                             ),
                             ft.Text(
                                 achievement.name,
                                 size=13,
-                                color=ft.Colors.with_opacity(0.9, ft.Colors.WHITE),
+                                color=colors.with_opacity(0.9, colors.WHITE),
                             ),
                         ],
                     ),
@@ -702,19 +907,16 @@ class AbitusApp:
         """Show confirmation dialog for data reset."""
         
         def close_dialog(e):
-            if dialog in self.page.overlay:
-                self.page.overlay.remove(dialog)
+            dialog.open = False
             self.page.update()
         
         def do_reset(e):
-            if dialog in self.page.overlay:
-                self.page.overlay.remove(dialog)
+            dialog.open = False
             self.page.update()
             self.reset_all_data()
         
         dialog = ft.AlertDialog(
             modal=True,
-            open=True,
             title=ft.Text("⚠️ Reset All Data?"),
             content=ft.Column(
                 tight=True,
@@ -731,23 +933,25 @@ class AbitusApp:
                     ft.Text(
                         "You will need to complete the character assessment again.",
                         italic=True,
-                        color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.7, colors.ON_SURFACE),
                     ),
                 ],
             ),
             actions=[
                 ft.TextButton("Cancel", on_click=close_dialog),
-                ft.FilledButton(
+                ft.ElevatedButton(
                     "Reset Everything",
-                    bgcolor=ft.Colors.ERROR,
-                    color=ft.Colors.WHITE,
+                    bgcolor=colors.ERROR,
+                    color=colors.WHITE,
                     on_click=do_reset,
                 ),
             ],
             actions_alignment=ft.MainAxisAlignment.END,
+            open=False,
         )
         
-        self.page.overlay.append(dialog)
+        self.page.dialog = dialog
+        dialog.open = True
         self.page.update()
     
     def reset_all_data(self):
@@ -760,9 +964,6 @@ class AbitusApp:
         self.achievements = []
         self.quests = []
         
-        # Clear any overlays
-        self.page.overlay.clear()
-        
         # Show assessment/interview
         self.show_assessment()
 
@@ -773,4 +974,4 @@ def main(page: ft.Page):
 
 
 # Run the app
-ft.run(main)
+ft.app(target=main)

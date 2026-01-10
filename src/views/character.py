@@ -4,6 +4,7 @@ import flet as ft
 from typing import Callable
 from datetime import datetime
 
+from utils.compat import colors, icons
 from models.character import Character
 from models.achievement import Achievement
 from models.stats import StatType, STAT_DEFINITIONS
@@ -70,15 +71,15 @@ class CharacterView(ft.Container):
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 controls=[
                     ft.IconButton(
-                        icon=ft.Icons.ARROW_BACK,
+                        icon=icons.ARROW_BACK,
                         on_click=lambda e: self.on_back(),
-                        icon_color=ft.Colors.WHITE,
+                        icon_color=colors.WHITE,
                     ),
                     ft.Text(
                         "Character Sheet",
                         size=20,
                         weight=ft.FontWeight.W_600,
-                        color=ft.Colors.WHITE,
+                        color=colors.WHITE,
                     ),
                     ft.Container(width=48),  # Spacer
                 ],
@@ -101,7 +102,7 @@ class CharacterView(ft.Container):
                     # Avatar and name
                     ft.Container(
                         content=ft.Text("🧙", size=64),
-                        bgcolor=ft.Colors.with_opacity(0.1, "#6366f1"),
+                        bgcolor=colors.with_opacity(0.1, "#6366f1"),
                         padding=20,
                         border_radius=50,
                     ),
@@ -114,7 +115,7 @@ class CharacterView(ft.Container):
                         content=ft.Text(
                             char.title,
                             size=14,
-                            color=ft.Colors.WHITE,
+                            color=colors.WHITE,
                         ),
                         bgcolor="#6366f1",
                         padding=ft.Padding(left=16, right=16, top=6, bottom=6),
@@ -135,7 +136,7 @@ class CharacterView(ft.Container):
                 ],
             ),
             padding=ft.Padding(24, 24, 24, 24),
-            bgcolor=ft.Colors.SURFACE_CONTAINER_HIGH,
+            bgcolor=colors.SURFACE_CONTAINER_HIGH,
             border_radius=20,
         )
     
@@ -153,7 +154,7 @@ class CharacterView(ft.Container):
                 ft.Text(
                     label,
                     size=11,
-                    color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                    color=colors.with_opacity(0.6, colors.ON_SURFACE),
                 ),
             ],
         )
@@ -175,7 +176,7 @@ class CharacterView(ft.Container):
                         ft.Text(
                             f"Total Level: {char.total_level}",
                             size=14,
-                            color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.6, colors.ON_SURFACE),
                         ),
                     ],
                 ),
@@ -207,7 +208,7 @@ class CharacterView(ft.Container):
                         ft.Text(
                             f"{len(unlocked)}/{len(self.achievements)} unlocked",
                             size=14,
-                            color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.6, colors.ON_SURFACE),
                         ),
                     ],
                 ),
@@ -217,7 +218,7 @@ class CharacterView(ft.Container):
                     "Unlocked",
                     size=13,
                     weight=ft.FontWeight.W_500,
-                    color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                    color=colors.with_opacity(0.5, colors.ON_SURFACE),
                 ) if unlocked else ft.Container(),
                 
                 ft.Container(
@@ -239,12 +240,12 @@ class CharacterView(ft.Container):
                             ft.Text(
                                 "No achievements yet",
                                 size=14,
-                                color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                                color=colors.with_opacity(0.6, colors.ON_SURFACE),
                             ),
                             ft.Text(
                                 "Complete quests to unlock achievements!",
                                 size=12,
-                                color=ft.Colors.with_opacity(0.4, ft.Colors.ON_SURFACE),
+                                color=colors.with_opacity(0.4, colors.ON_SURFACE),
                             ),
                         ],
                     ),
@@ -256,7 +257,7 @@ class CharacterView(ft.Container):
                     "In Progress",
                     size=13,
                     weight=ft.FontWeight.W_500,
-                    color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                    color=colors.with_opacity(0.5, colors.ON_SURFACE),
                 ) if locked else ft.Container(),
                 
                 ft.Container(
@@ -300,7 +301,7 @@ class CharacterView(ft.Container):
                                 content=ft.Stack(
                                     controls=[
                                         ft.Container(
-                                            bgcolor=ft.Colors.with_opacity(0.2, ft.Colors.ON_SURFACE),
+                                            bgcolor=colors.with_opacity(0.2, colors.ON_SURFACE),
                                             border_radius=2,
                                             height=4,
                                             expand=True,
@@ -321,7 +322,7 @@ class CharacterView(ft.Container):
                 ],
             ),
             padding=ft.Padding(12, 12, 12, 12),
-            bgcolor=ft.Colors.SURFACE_CONTAINER_HIGH,
+            bgcolor=colors.SURFACE_CONTAINER_HIGH,
             border_radius=10,
             opacity=0.7,
         )
@@ -352,7 +353,7 @@ class CharacterView(ft.Container):
                         ],
                     ),
                     padding=ft.Padding(16, 16, 16, 16),
-                    bgcolor=ft.Colors.SURFACE_CONTAINER_HIGH,
+                    bgcolor=colors.SURFACE_CONTAINER_HIGH,
                     border_radius=12,
                 ),
             ],
@@ -365,7 +366,7 @@ class CharacterView(ft.Container):
                 ft.Text(
                     label,
                     size=14,
-                    color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                    color=colors.with_opacity(0.7, colors.ON_SURFACE),
                 ),
                 ft.Text(
                     value,

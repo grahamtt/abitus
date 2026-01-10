@@ -2,6 +2,8 @@
 
 import flet as ft
 from typing import Callable, Optional
+
+from utils.compat import colors, icons
 from models.character import Character
 from models.stats import StatType, STAT_DEFINITIONS
 
@@ -85,7 +87,7 @@ class AssessmentView(ft.Container):
                                 ft.Text(
                                     subtitle,
                                     size=14,
-                                    color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                                    color=colors.with_opacity(0.7, colors.ON_SURFACE),
                                     text_align=ft.TextAlign.CENTER,
                                 ),
                             ],
@@ -109,22 +111,22 @@ class AssessmentView(ft.Container):
                                     content=ft.Row(
                                         spacing=4,
                                         controls=[
-                                            ft.Icon(ft.Icons.ARROW_BACK, size=18),
+                                            ft.Icon(icons.ARROW_BACK, size=18),
                                             ft.Text("Back"),
                                         ],
                                     ),
                                     on_click=lambda e: self._prev_step(),
                                 ) if show_back else ft.Container(),
-                                ft.FilledButton(
+                                ft.ElevatedButton(
                                     content=ft.Row(
                                         spacing=6,
                                         controls=[
                                             ft.Text(next_text, weight=ft.FontWeight.W_500),
-                                            ft.Icon(ft.Icons.ARROW_FORWARD, size=18),
+                                            ft.Icon(icons.ARROW_FORWARD, size=18),
                                         ],
                                     ),
                                     bgcolor="#6366f1",
-                                    color=ft.Colors.WHITE,
+                                    color=colors.WHITE,
                                     on_click=handle_next,
                                 ),
                             ],
@@ -138,8 +140,8 @@ class AssessmentView(ft.Container):
                 begin=ft.Alignment(0, -1),
                 end=ft.Alignment(0, 1),
                 colors=[
-                    ft.Colors.with_opacity(0.05, "#6366f1"),
-                    ft.Colors.TRANSPARENT,
+                    colors.with_opacity(0.05, "#6366f1"),
+                    colors.TRANSPARENT,
                 ],
             ),
         )
@@ -163,7 +165,7 @@ class AssessmentView(ft.Container):
                         "Abitus transforms your personal growth into an epic RPG adventure.",
                         size=16,
                         text_align=ft.TextAlign.CENTER,
-                        color=ft.Colors.with_opacity(0.8, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.8, colors.ON_SURFACE),
                     ),
                     ft.Container(
                         content=ft.Column(
@@ -182,7 +184,7 @@ class AssessmentView(ft.Container):
                         "Let's learn about you to create your character...",
                         size=14,
                         italic=True,
-                        color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.6, colors.ON_SURFACE),
                     ),
                 ],
             ),
@@ -226,7 +228,7 @@ class AssessmentView(ft.Container):
                     ft.Text(
                         "This is how you'll be known throughout your adventure",
                         size=12,
-                        color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.5, colors.ON_SURFACE),
                     ),
                 ],
             ),
@@ -319,7 +321,7 @@ class AssessmentView(ft.Container):
                                             ft.Text(
                                                 subtitle,
                                                 size=11,
-                                                color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                                                color=colors.with_opacity(0.5, colors.ON_SURFACE),
                                             ),
                                         ],
                                     ),
@@ -327,7 +329,7 @@ class AssessmentView(ft.Container):
                             ),
                             ft.Container(
                                 content=value_text,
-                                bgcolor=ft.Colors.with_opacity(0.15, definition.color),
+                                bgcolor=colors.with_opacity(0.15, definition.color),
                                 padding=ft.Padding(left=12, right=12, top=4, bottom=4),
                                 border_radius=12,
                             ),
@@ -344,7 +346,7 @@ class AssessmentView(ft.Container):
                 ],
             ),
             padding=ft.Padding(12, 12, 12, 12),
-            bgcolor=ft.Colors.with_opacity(0.05, definition.color),
+            bgcolor=colors.with_opacity(0.05, definition.color),
             border_radius=12,
         )
     
@@ -449,22 +451,22 @@ class AssessmentView(ft.Container):
                             ft.Text(
                                 desc,
                                 size=12,
-                                color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                                color=colors.with_opacity(0.6, colors.ON_SURFACE),
                             ),
                         ],
                     ),
                     ft.Container(expand=True),
                     ft.Icon(
-                        ft.Icons.CHECK_CIRCLE if selected else ft.Icons.CIRCLE_OUTLINED,
-                        color="#6366f1" if selected else ft.Colors.with_opacity(0.3, ft.Colors.ON_SURFACE),
+                        icons.CHECK_CIRCLE if selected else icons.CIRCLE_OUTLINED,
+                        color="#6366f1" if selected else colors.with_opacity(0.3, colors.ON_SURFACE),
                         size=24,
                     ),
                 ],
             ),
             padding=ft.Padding(16, 16, 16, 16),
             border_radius=12,
-            bgcolor=ft.Colors.with_opacity(0.1, "#6366f1") if selected else ft.Colors.SURFACE_CONTAINER_HIGH,
-            border=ft.border.all(2, "#6366f1") if selected else ft.border.all(1, ft.Colors.with_opacity(0.1, ft.Colors.ON_SURFACE)),
+            bgcolor=colors.with_opacity(0.1, "#6366f1") if selected else colors.SURFACE_CONTAINER_HIGH,
+            border=ft.border.all(2, "#6366f1") if selected else ft.border.all(1, colors.with_opacity(0.1, colors.ON_SURFACE)),
             on_click=on_click,
             ink=True,
         )
@@ -497,7 +499,7 @@ class AssessmentView(ft.Container):
                                         size=14,
                                         color=definition.color,
                                     ),
-                                    ft.Icon(ft.Icons.ARROW_FORWARD, size=14),
+                                    ft.Icon(icons.ARROW_FORWARD, size=14),
                                     ft.Text(
                                         f"Lv.{target}",
                                         size=14,
@@ -509,7 +511,7 @@ class AssessmentView(ft.Container):
                         ],
                     ),
                     padding=ft.Padding(left=12, right=12, top=6, bottom=6),
-                    bgcolor=ft.Colors.with_opacity(0.05, definition.color),
+                    bgcolor=colors.with_opacity(0.05, definition.color),
                     border_radius=8,
                 )
             )
@@ -541,7 +543,7 @@ class AssessmentView(ft.Container):
                                 ft.Text(
                                     "Novice Explorer",
                                     size=14,
-                                    color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                                    color=colors.with_opacity(0.6, colors.ON_SURFACE),
                                 ),
                             ],
                         ),
@@ -553,7 +555,7 @@ class AssessmentView(ft.Container):
                         "Your Stats",
                         size=12,
                         weight=ft.FontWeight.W_600,
-                        color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.5, colors.ON_SURFACE),
                     ),
                     
                     # Stats list
@@ -582,7 +584,7 @@ class AssessmentView(ft.Container):
                                     ft.Text(
                                         "Daily Time",
                                         size=11,
-                                        color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                                        color=colors.with_opacity(0.5, colors.ON_SURFACE),
                                     ),
                                 ],
                             ),
@@ -599,7 +601,7 @@ class AssessmentView(ft.Container):
                                     ft.Text(
                                         "Challenge",
                                         size=11,
-                                        color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                                        color=colors.with_opacity(0.5, colors.ON_SURFACE),
                                     ),
                                 ],
                             ),

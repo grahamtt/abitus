@@ -1,6 +1,8 @@
 """Stat bar component for displaying character stats."""
 
 import flet as ft
+
+from utils.compat import colors
 from models.stats import Stat, STAT_DEFINITIONS
 
 
@@ -23,8 +25,8 @@ class StatBar(ft.Container):
             content=self._build_content(),
             padding=ft.Padding(12, 12, 12, 12) if not compact else ft.Padding(8, 8, 8, 8),
             border_radius=12,
-            bgcolor=ft.Colors.with_opacity(0.1, stat.definition.color),
-            border=ft.border.all(1, ft.Colors.with_opacity(0.2, stat.definition.color)),
+            bgcolor=colors.with_opacity(0.1, stat.definition.color),
+            border=ft.border.all(1, colors.with_opacity(0.2, stat.definition.color)),
             on_click=on_click,
             animate=ft.Animation(200, ft.AnimationCurve.EASE_OUT),
         )
@@ -60,7 +62,7 @@ class StatBar(ft.Container):
                                 f"Lv.{self.stat.level}",
                                 size=14,
                                 weight=ft.FontWeight.BOLD,
-                                color=ft.Colors.WHITE,
+                                color=colors.WHITE,
                             ),
                             bgcolor=definition.color,
                             padding=ft.Padding(left=10, right=10, top=4, bottom=4),
@@ -74,7 +76,7 @@ class StatBar(ft.Container):
                         controls=[
                             # Background
                             ft.Container(
-                                bgcolor=ft.Colors.with_opacity(0.2, definition.color),
+                                bgcolor=colors.with_opacity(0.2, definition.color),
                                 border_radius=4,
                                 height=8,
                                 expand=True,
@@ -99,12 +101,12 @@ class StatBar(ft.Container):
                         ft.Text(
                             f"{self.stat.current_xp - self.stat.xp_for_current_level} / {self.stat.xp_for_next_level - self.stat.xp_for_current_level} XP",
                             size=11,
-                            color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.7, colors.ON_SURFACE),
                         ),
                         ft.Text(
                             f"{self.stat.xp_remaining} to next level",
                             size=11,
-                            color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.5, colors.ON_SURFACE),
                         ),
                     ],
                 ) if self.show_xp else ft.Container(),
@@ -145,7 +147,7 @@ class StatBar(ft.Container):
                             content=ft.Stack(
                                 controls=[
                                     ft.Container(
-                                        bgcolor=ft.Colors.with_opacity(0.2, definition.color),
+                                        bgcolor=colors.with_opacity(0.2, definition.color),
                                         border_radius=2,
                                         height=4,
                                         width=100,
@@ -171,8 +173,8 @@ class StatBar(ft.Container):
         """Update the stat and refresh display."""
         self.stat = stat
         self.content = self._build_content()
-        self.bgcolor = ft.Colors.with_opacity(0.1, stat.definition.color)
-        self.border = ft.border.all(1, ft.Colors.with_opacity(0.2, stat.definition.color))
+        self.bgcolor = colors.with_opacity(0.1, stat.definition.color)
+        self.border = ft.border.all(1, colors.with_opacity(0.2, stat.definition.color))
 
 
 class StatHexagon(ft.Container):
@@ -245,7 +247,7 @@ class StatHexagon(ft.Container):
             ),
             width=60,
             height=50,
-            bgcolor=ft.Colors.with_opacity(0.1, stat.definition.color),
+            bgcolor=colors.with_opacity(0.1, stat.definition.color),
             border_radius=8,
-            border=ft.border.all(1, ft.Colors.with_opacity(0.3, stat.definition.color)),
+            border=ft.border.all(1, colors.with_opacity(0.3, stat.definition.color)),
         )

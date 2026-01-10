@@ -3,6 +3,7 @@
 import flet as ft
 from typing import Callable
 
+from utils.compat import colors, icons
 from models.character import Character
 
 
@@ -68,15 +69,15 @@ class SettingsView(ft.Container):
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 controls=[
                     ft.IconButton(
-                        icon=ft.Icons.ARROW_BACK,
+                        icon=icons.ARROW_BACK,
                         on_click=lambda e: self.on_back(),
-                        icon_color=ft.Colors.WHITE,
+                        icon_color=colors.WHITE,
                     ),
                     ft.Text(
                         "Settings",
                         size=20,
                         weight=ft.FontWeight.W_600,
-                        color=ft.Colors.WHITE,
+                        color=colors.WHITE,
                     ),
                     ft.Container(width=48),  # Spacer
                 ],
@@ -110,7 +111,7 @@ class SettingsView(ft.Container):
                         ],
                     ),
                     padding=ft.Padding(16, 16, 16, 16),
-                    bgcolor=ft.Colors.SURFACE_CONTAINER_HIGH,
+                    bgcolor=colors.SURFACE_CONTAINER_HIGH,
                     border_radius=12,
                 ),
             ],
@@ -161,7 +162,7 @@ class SettingsView(ft.Container):
                                             for v, label in time_options
                                         ],
                                         border_radius=10,
-                                        on_select=lambda e: self._update_setting(
+                                        on_change=lambda e: self._update_setting(
                                             "available_time_minutes", 
                                             int(e.control.value)
                                         ),
@@ -185,7 +186,7 @@ class SettingsView(ft.Container):
                                             for v, label in challenge_options
                                         ],
                                         border_radius=10,
-                                        on_select=lambda e: self._update_setting(
+                                        on_change=lambda e: self._update_setting(
                                             "challenge_level",
                                             int(e.control.value)
                                         ),
@@ -195,7 +196,7 @@ class SettingsView(ft.Container):
                         ],
                     ),
                     padding=ft.Padding(16, 16, 16, 16),
-                    bgcolor=ft.Colors.SURFACE_CONTAINER_HIGH,
+                    bgcolor=colors.SURFACE_CONTAINER_HIGH,
                     border_radius=12,
                 ),
             ],
@@ -237,7 +238,7 @@ class SettingsView(ft.Container):
                         ],
                     ),
                     padding=ft.Padding(16, 16, 16, 16),
-                    bgcolor=ft.Colors.SURFACE_CONTAINER_HIGH,
+                    bgcolor=colors.SURFACE_CONTAINER_HIGH,
                     border_radius=12,
                 ),
             ],
@@ -260,7 +261,7 @@ class SettingsView(ft.Container):
                             ft.Text(
                                 subtitle,
                                 size=12,
-                                color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                                color=colors.with_opacity(0.6, colors.ON_SURFACE),
                             ),
                         ],
                     ),
@@ -290,17 +291,17 @@ class SettingsView(ft.Container):
                             ft.Text(
                                 "Your data is stored locally on this device.",
                                 size=13,
-                                color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                                color=colors.with_opacity(0.7, colors.ON_SURFACE),
                             ),
-                            ft.FilledButton(
+                            ft.ElevatedButton(
                                 content=ft.Row(
                                     alignment=ft.MainAxisAlignment.CENTER,
                                     spacing=8,
                                     controls=[
-                                        ft.Icon(ft.Icons.DELETE_FOREVER, size=18, color=ft.Colors.ERROR),
+                                        ft.Icon(icons.DELETE_FOREVER, size=18, color=colors.ERROR),
                                         ft.Text(
                                             "Reset All Data",
-                                            color=ft.Colors.ERROR,
+                                            color=colors.ERROR,
                                             weight=ft.FontWeight.W_500,
                                         ),
                                     ],
@@ -310,7 +311,7 @@ class SettingsView(ft.Container):
                         ],
                     ),
                     padding=ft.Padding(16, 16, 16, 16),
-                    bgcolor=ft.Colors.SURFACE_CONTAINER_HIGH,
+                    bgcolor=colors.SURFACE_CONTAINER_HIGH,
                     border_radius=12,
                 ),
             ],
@@ -339,13 +340,13 @@ class SettingsView(ft.Container):
                             ft.Text(
                                 "Version 1.0.0",
                                 size=13,
-                                color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                                color=colors.with_opacity(0.6, colors.ON_SURFACE),
                             ),
                             ft.Text(
                                 "Level up your real life through epic quests and meaningful progression.",
                                 size=13,
                                 text_align=ft.TextAlign.CENTER,
-                                color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                                color=colors.with_opacity(0.7, colors.ON_SURFACE),
                             ),
                             ft.Container(
                                 content=ft.Text(
@@ -353,14 +354,14 @@ class SettingsView(ft.Container):
                                     size=12,
                                     italic=True,
                                     text_align=ft.TextAlign.CENTER,
-                                    color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                                    color=colors.with_opacity(0.5, colors.ON_SURFACE),
                                 ),
                                 padding=ft.Padding(left=0, right=0, top=8, bottom=0),
                             ),
                         ],
                     ),
                     padding=ft.Padding(20, 20, 20, 20),
-                    bgcolor=ft.Colors.SURFACE_CONTAINER_HIGH,
+                    bgcolor=colors.SURFACE_CONTAINER_HIGH,
                     border_radius=12,
                 ),
             ],

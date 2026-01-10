@@ -4,6 +4,7 @@ import flet as ft
 from typing import Callable, Optional
 from datetime import datetime
 
+from utils.compat import colors, icons
 from models.character import Character
 from models.quest import Quest, QuestStatus
 from models.stats import StatType, STAT_DEFINITIONS
@@ -105,21 +106,21 @@ class HomeView(ft.Container):
                                     ft.Text(
                                         f"{emoji} {greeting},",
                                         size=14,
-                                        color=ft.Colors.with_opacity(0.7, ft.Colors.ON_PRIMARY_CONTAINER),
+                                        color=colors.with_opacity(0.7, colors.ON_PRIMARY_CONTAINER),
                                     ),
                                     ft.Text(
                                         char.name,
                                         size=28,
                                         weight=ft.FontWeight.BOLD,
-                                        color=ft.Colors.ON_PRIMARY_CONTAINER,
+                                        color=colors.ON_PRIMARY_CONTAINER,
                                     ),
                                     ft.Container(
                                         content=ft.Text(
                                             char.title,
                                             size=12,
-                                            color=ft.Colors.WHITE,
+                                            color=colors.WHITE,
                                         ),
-                                        bgcolor=ft.Colors.with_opacity(0.3, ft.Colors.WHITE),
+                                        bgcolor=colors.with_opacity(0.3, colors.WHITE),
                                         padding=ft.Padding(left=10, right=10, top=4, bottom=4),
                                         border_radius=12,
                                     ),
@@ -181,11 +182,11 @@ class HomeView(ft.Container):
                         f"{stat.level}",
                         size=13,
                         weight=ft.FontWeight.BOLD,
-                        color=ft.Colors.WHITE,
+                        color=colors.WHITE,
                     ),
                 ],
             ),
-            bgcolor=ft.Colors.with_opacity(0.2, ft.Colors.WHITE),
+            bgcolor=colors.with_opacity(0.2, colors.WHITE),
             padding=ft.Padding(left=10, right=10, top=4, bottom=4),
             border_radius=12,
         )
@@ -204,14 +205,14 @@ class HomeView(ft.Container):
                             value,
                             size=18,
                             weight=ft.FontWeight.BOLD,
-                            color=ft.Colors.WHITE,
+                            color=colors.WHITE,
                         ),
                     ],
                 ),
                 ft.Text(
                     label,
                     size=11,
-                    color=ft.Colors.with_opacity(0.7, ft.Colors.WHITE),
+                    color=colors.with_opacity(0.7, colors.WHITE),
                 ),
             ],
         )
@@ -233,12 +234,12 @@ class HomeView(ft.Container):
                         ft.Text(
                             "Accept a quest below to begin!",
                             size=13,
-                            color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.6, colors.ON_SURFACE),
                         ),
                     ],
                 ),
                 padding=ft.Padding(24, 24, 24, 24),
-                bgcolor=ft.Colors.SURFACE_CONTAINER_HIGH,
+                bgcolor=colors.SURFACE_CONTAINER_HIGH,
                 border_radius=16,
             )
         
@@ -256,7 +257,7 @@ class HomeView(ft.Container):
                         ft.Text(
                             f"{len(self.active_quests)} in progress",
                             size=13,
-                            color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.6, colors.ON_SURFACE),
                         ),
                     ],
                 ),
@@ -290,12 +291,12 @@ class HomeView(ft.Container):
                         ft.Text(
                             "New quests will appear tomorrow",
                             size=13,
-                            color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.6, colors.ON_SURFACE),
                         ),
                     ],
                 ),
                 padding=ft.Padding(24, 24, 24, 24),
-                bgcolor=ft.Colors.SURFACE_CONTAINER_HIGH,
+                bgcolor=colors.SURFACE_CONTAINER_HIGH,
                 border_radius=16,
             )
         
@@ -374,36 +375,19 @@ class HomeView(ft.Container):
                             ft.Row(
                                 spacing=8,
                                 controls=[
-                                    ft.Icon(ft.Icons.LIGHTBULB, size=18, color="#f59e0b"),
+                                    ft.Icon(icons.LIGHTBULB, size=18, color="#f59e0b"),
                                     ft.Text(
                                         f"Focus on {recommended.definition.name} to reach your goal!",
                                         size=13,
-                                        color=ft.Colors.with_opacity(0.8, ft.Colors.ON_SURFACE),
+                                        color=colors.with_opacity(0.8, colors.ON_SURFACE),
                                     ),
                                 ],
                             ),
                         ],
                     ),
                     padding=ft.Padding(16, 16, 16, 16),
-                    bgcolor=ft.Colors.SURFACE_CONTAINER_HIGH,
+                    bgcolor=colors.SURFACE_CONTAINER_HIGH,
                     border_radius=12,
-                ),
-                
-                # View character button
-                ft.Container(
-                    content=ft.FilledButton(
-                        content=ft.Row(
-                            alignment=ft.MainAxisAlignment.CENTER,
-                            spacing=8,
-                            controls=[
-                                ft.Text("📊", size=16),
-                                ft.Text("View Full Character Sheet", weight=ft.FontWeight.W_500),
-                            ],
-                        ),
-                        on_click=lambda e: self.on_view_character(),
-                        width=float("inf"),
-                    ),
-                    padding=ft.Padding(left=0, right=0, top=8, bottom=0),
                 ),
             ],
         )

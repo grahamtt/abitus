@@ -4,6 +4,7 @@ import flet as ft
 from typing import Callable, Optional
 from datetime import datetime
 
+from utils.compat import colors, icons
 from models.journal import JournalEntry, JournalEntryType, ENTRY_PROMPTS, get_random_prompt
 from models.quest import Quest, QuestStatus
 from services.journal import JournalService
@@ -19,16 +20,19 @@ class JournalView(ft.Container):
         on_entry_saved: Callable[[JournalEntry, list[Quest]], None],
         on_back: Callable[[], None],
         initial_entry_type: Optional[JournalEntryType] = None,  # Start with new entry of this type
+        completed_quest_context: Optional[Quest] = None,  # Quest to write about
     ):
         self.journal_service = journal_service
         self.active_quests = active_quests
         self.on_entry_saved = on_entry_saved
         self.on_back = on_back
+        self.completed_quest_context = completed_quest_context
         
         # State - if initial_entry_type provided, start in new entry mode
-        self.current_view = "new" if initial_entry_type else "list"
+        self.current_view = "new" if initial_entry_type or completed_quest_context else "list"
         self.selected_entry: Optional[JournalEntry] = None
-        self.selected_type = initial_entry_type or JournalEntryType.FREE_FORM
+        self.selected_type = initial_entry_type or JournalEntryType.LESSON if completed_quest_context else JournalEntryType.FREE_FORM
+        self.filter_type: Optional[JournalEntryType] = None  # For filtering entries list
         self.mood_before: Optional[int] = None
         self.mood_after: Optional[int] = None
         self.editing_entry: Optional[JournalEntry] = None
@@ -73,6 +77,9 @@ class JournalView(ft.Container):
     def _build_list_view(self) -> list[ft.Control]:
         """Build the journal entries list."""
         entries = self.journal_service.get_entries(limit=50)
+        # Filter entries by type if a filter is selected
+        if self.filter_type:
+            entries = [e for e in entries if e.entry_type == self.filter_type]
         stats = self.journal_service.get_entry_stats()
         
         # Header section
@@ -88,7 +95,7 @@ class JournalView(ft.Container):
                                 spacing=8,
                                 controls=[
                                     ft.IconButton(
-                                        icon=ft.Icons.ARROW_BACK,
+                                        icon=icons.ARROW_BACK,
                                         on_click=lambda e: self.on_back(),
                                     ),
                                     ft.Text(
@@ -98,9 +105,9 @@ class JournalView(ft.Container):
                                     ),
                                 ],
                             ),
-                            ft.FilledButton(
+                            ft.ElevatedButton(
                                 "New Entry",
-                                icon=ft.Icons.EDIT,
+                                icon=icons.EDIT,
                                 on_click=lambda e: self._show_new_entry(),
                             ),
                         ],
@@ -111,22 +118,22 @@ class JournalView(ft.Container):
                         controls=[
                             self._build_stat_chip(
                                 f"🔥 {stats['streak']} day streak" if stats['streak'] > 0 else "Start your streak!",
-                                ft.Colors.ORANGE_700,
+                                colors.ORANGE_700,
                             ),
                             self._build_stat_chip(
                                 f"📝 {stats['total_entries']} entries",
-                                ft.Colors.BLUE_700,
+                                colors.BLUE_700,
                             ),
                             self._build_stat_chip(
                                 f"✍️ {stats['total_words']:,} words",
-                                ft.Colors.GREEN_700,
+                                colors.GREEN_700,
                             ),
                         ],
                     ),
                 ],
             ),
             padding=ft.Padding(20, 20, 20, 16),
-            bgcolor=ft.Colors.with_opacity(0.05, ft.Colors.PRIMARY),
+            bgcolor=colors.with_opacity(0.05, colors.PRIMARY),
         )
         
         # Journal-satisfiable quests prompt
@@ -141,7 +148,7 @@ class JournalView(ft.Container):
                             "📋 Active journal quests:",
                             size=14,
                             weight=ft.FontWeight.BOLD,
-                            color=ft.Colors.AMBER_700,
+                            color=colors.AMBER_700,
                         ),
                         ft.Column(
                             spacing=4,
@@ -149,7 +156,7 @@ class JournalView(ft.Container):
                                 ft.Text(
                                     f"• {q.title} ({q.satisfaction_description})",
                                     size=13,
-                                    color=ft.Colors.with_opacity(0.8, ft.Colors.ON_SURFACE),
+                                    color=colors.with_opacity(0.8, colors.ON_SURFACE),
                                 )
                                 for q in journal_quests[:3]
                             ],
@@ -157,7 +164,7 @@ class JournalView(ft.Container):
                     ],
                 ),
                 padding=ft.Padding(20, 12, 20, 12),
-                bgcolor=ft.Colors.with_opacity(0.1, ft.Colors.AMBER),
+                bgcolor=colors.with_opacity(0.1, colors.AMBER),
                 border_radius=8,
                 margin=ft.Margin(20, 0, 20, 16),
             )
@@ -204,12 +211,12 @@ class JournalView(ft.Container):
                         ft.Text(
                             "Begin writing your story by creating your first entry.",
                             size=14,
-                            color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.7, colors.ON_SURFACE),
                             text_align=ft.TextAlign.CENTER,
                         ),
-                        ft.FilledButton(
+                        ft.ElevatedButton(
                             "Write First Entry",
-                            icon=ft.Icons.EDIT,
+                            icon=icons.EDIT,
                             on_click=lambda e: self._show_new_entry(),
                         ),
                     ],
@@ -233,7 +240,12 @@ class JournalView(ft.Container):
     
     def _build_new_entry_view(self) -> list[ft.Control]:
         """Build the new entry creation view."""
-        prompt = get_random_prompt(self.selected_type)
+        # Use special prompt if writing about a completed quest
+        if self.completed_quest_context:
+            quest = self.completed_quest_context
+            prompt = f"You completed '{quest.title}'! What did you do, learn, or experience?"
+        else:
+            prompt = get_random_prompt(self.selected_type)
         
         # Check which quests this entry type could satisfy
         potential_quests = [
@@ -252,7 +264,7 @@ class JournalView(ft.Container):
                         spacing=8,
                         controls=[
                             ft.IconButton(
-                                icon=ft.Icons.CLOSE,
+                                icon=icons.CLOSE,
                                 on_click=lambda e: self._cancel_entry(),
                             ),
                             ft.Text(
@@ -262,9 +274,9 @@ class JournalView(ft.Container):
                             ),
                         ],
                     ),
-                    ft.FilledButton(
+                    ft.ElevatedButton(
                         "Save",
-                        icon=ft.Icons.CHECK,
+                        icon=icons.CHECK,
                         on_click=lambda e: self._save_entry(),
                     ),
                 ],
@@ -299,6 +311,44 @@ class JournalView(ft.Container):
             padding=ft.Padding(20, 0, 20, 16),
         )
         
+        # Completed quest context indicator
+        completed_quest_indicator = None
+        if self.completed_quest_context:
+            quest = self.completed_quest_context
+            completed_quest_indicator = ft.Container(
+                content=ft.Column(
+                    spacing=8,
+                    controls=[
+                        ft.Row(
+                            spacing=8,
+                            controls=[
+                                ft.Text("✨", size=20),
+                                ft.Text(
+                                    "Quest Completed!",
+                                    size=14,
+                                    weight=ft.FontWeight.BOLD,
+                                    color="#22c55e",
+                                ),
+                            ],
+                        ),
+                        ft.Text(
+                            quest.title,
+                            size=13,
+                            weight=ft.FontWeight.W_500,
+                        ),
+                        ft.Text(
+                            "Record what you did, learned, or experienced.",
+                            size=12,
+                            color=colors.with_opacity(0.7, colors.ON_SURFACE),
+                        ),
+                    ],
+                ),
+                padding=ft.Padding(16, 12, 16, 12),
+                bgcolor=colors.with_opacity(0.1, "#22c55e"),
+                border_radius=10,
+                margin=ft.Margin(20, 0, 20, 16),
+            )
+        
         # Quest satisfaction indicator - show which quests could be completed
         quest_indicator = None
         if potential_quests:
@@ -314,24 +364,24 @@ class JournalView(ft.Container):
                         ft.Row(
                             spacing=8,
                             controls=[
-                                ft.Icon(ft.Icons.AUTO_AWESOME, color=ft.Colors.AMBER_700, size=20),
+                                ft.Icon(icons.AUTO_AWESOME, color=colors.AMBER_700, size=20),
                                 ft.Text(
                                     f"Can complete: {', '.join(q.title for q in potential_quests[:2])}",
                                     size=13,
                                     weight=ft.FontWeight.BOLD,
-                                    color=ft.Colors.AMBER_700,
+                                    color=colors.AMBER_700,
                                 ),
                             ],
                         ),
                         ft.Text(
                             f"Write at least {min_words} words to complete the quest",
                             size=12,
-                            color=ft.Colors.with_opacity(0.8, ft.Colors.AMBER_700),
+                            color=colors.with_opacity(0.8, colors.AMBER_700),
                         ),
                     ],
                 ),
                 padding=ft.Padding(20, 8, 20, 8),
-                bgcolor=ft.Colors.with_opacity(0.1, ft.Colors.AMBER),
+                bgcolor=colors.with_opacity(0.1, colors.AMBER),
                 border_radius=8,
                 margin=ft.Margin(20, 0, 20, 16),
             )
@@ -368,10 +418,10 @@ class JournalView(ft.Container):
                     prompt,
                     size=16,
                     italic=True,
-                    color=ft.Colors.with_opacity(0.8, ft.Colors.ON_SURFACE),
+                    color=colors.with_opacity(0.8, colors.ON_SURFACE),
                 ),
                 padding=ft.Padding(16, 12, 16, 12),
-                bgcolor=ft.Colors.with_opacity(0.05, ft.Colors.PRIMARY),
+                bgcolor=colors.with_opacity(0.05, colors.PRIMARY),
                 border_radius=8,
             ),
             padding=ft.Padding(20, 0, 20, 8),
@@ -396,6 +446,8 @@ class JournalView(ft.Container):
         )
         
         controls = [header, type_selector]
+        if completed_quest_indicator:
+            controls.append(completed_quest_indicator)
         if quest_indicator:
             controls.append(quest_indicator)
         controls.extend([mood_before_section, prompt_section, content_section])
@@ -418,7 +470,7 @@ class JournalView(ft.Container):
                         spacing=8,
                         controls=[
                             ft.IconButton(
-                                icon=ft.Icons.CLOSE,
+                                icon=icons.CLOSE,
                                 on_click=lambda e: self._cancel_edit(),
                             ),
                             ft.Text(
@@ -428,9 +480,9 @@ class JournalView(ft.Container):
                             ),
                         ],
                     ),
-                    ft.FilledButton(
+                    ft.ElevatedButton(
                         "Save",
-                        icon=ft.Icons.CHECK,
+                        icon=icons.CHECK,
                         on_click=lambda e: self._save_edit(),
                     ),
                 ],
@@ -446,12 +498,12 @@ class JournalView(ft.Container):
                     ft.Text(
                         f"{entry.type_icon} {entry.type_name}",
                         size=14,
-                        color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.7, colors.ON_SURFACE),
                     ),
                     ft.Text(
                         entry.created_at.strftime("%B %d, %Y"),
                         size=14,
-                        color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.7, colors.ON_SURFACE),
                     ),
                 ],
             ),
@@ -467,10 +519,10 @@ class JournalView(ft.Container):
                         entry.prompt_used,
                         size=14,
                         italic=True,
-                        color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.7, colors.ON_SURFACE),
                     ),
                     padding=ft.Padding(12, 8, 12, 8),
-                    bgcolor=ft.Colors.with_opacity(0.05, ft.Colors.PRIMARY),
+                    bgcolor=colors.with_opacity(0.05, colors.PRIMARY),
                     border_radius=8,
                 ),
                 padding=ft.Padding(20, 0, 20, 8),
@@ -542,7 +594,7 @@ class JournalView(ft.Container):
                         spacing=8,
                         controls=[
                             ft.IconButton(
-                                icon=ft.Icons.ARROW_BACK,
+                                icon=icons.ARROW_BACK,
                                 on_click=lambda e: self._show_list(),
                             ),
                             ft.Text(
@@ -556,14 +608,14 @@ class JournalView(ft.Container):
                         spacing=0,
                         controls=[
                             ft.IconButton(
-                                icon=ft.Icons.EDIT_OUTLINED,
-                                icon_color=ft.Colors.PRIMARY,
+                                icon=icons.EDIT_OUTLINED,
+                                icon_color=colors.PRIMARY,
                                 on_click=lambda e: self._edit_entry(entry),
                                 tooltip="Edit entry",
                             ),
                             ft.IconButton(
-                                icon=ft.Icons.DELETE_OUTLINE,
-                                icon_color=ft.Colors.ERROR,
+                                icon=icons.DELETE_OUTLINE,
+                                icon_color=colors.ERROR,
                                 on_click=lambda e: self._delete_entry(entry),
                                 tooltip="Delete entry",
                             ),
@@ -582,12 +634,12 @@ class JournalView(ft.Container):
                     ft.Text(
                         entry.created_at.strftime("%B %d, %Y at %I:%M %p"),
                         size=14,
-                        color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.7, colors.ON_SURFACE),
                     ),
                     ft.Text(
                         f"{entry.word_count} words",
                         size=14,
-                        color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.7, colors.ON_SURFACE),
                     ),
                 ],
             ),
@@ -608,7 +660,7 @@ class JournalView(ft.Container):
                     ft.Text(
                         f"Change: {change_text}",
                         size=14,
-                        color=ft.Colors.GREEN if entry.mood_change > 0 else ft.Colors.RED if entry.mood_change < 0 else None,
+                        color=colors.GREEN if entry.mood_change > 0 else colors.RED if entry.mood_change < 0 else None,
                     )
                 )
             
@@ -626,10 +678,10 @@ class JournalView(ft.Container):
                         entry.prompt_used,
                         size=14,
                         italic=True,
-                        color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.7, colors.ON_SURFACE),
                     ),
                     padding=ft.Padding(12, 8, 12, 8),
-                    bgcolor=ft.Colors.with_opacity(0.05, ft.Colors.PRIMARY),
+                    bgcolor=colors.with_opacity(0.05, colors.PRIMARY),
                     border_radius=8,
                 ),
                 padding=ft.Padding(20, 0, 20, 16),
@@ -680,7 +732,7 @@ class JournalView(ft.Container):
                             ft.Text(
                                 self._format_date(entry.created_at),
                                 size=12,
-                                color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                                color=colors.with_opacity(0.6, colors.ON_SURFACE),
                             ),
                         ],
                     ),
@@ -688,7 +740,7 @@ class JournalView(ft.Container):
                     ft.Text(
                         preview,
                         size=14,
-                        color=ft.Colors.with_opacity(0.8, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.8, colors.ON_SURFACE),
                     ),
                     # Footer
                     ft.Row(
@@ -697,7 +749,7 @@ class JournalView(ft.Container):
                             ft.Text(
                                 f"{entry.word_count} words",
                                 size=12,
-                                color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                                color=colors.with_opacity(0.5, colors.ON_SURFACE),
                             ),
                             *([
                                 ft.Text(
@@ -710,26 +762,38 @@ class JournalView(ft.Container):
                 ],
             ),
             padding=ft.Padding(16, 12, 16, 12),
-            bgcolor=ft.Colors.SURFACE_CONTAINER_HIGHEST,
+            bgcolor=colors.SURFACE_CONTAINER_HIGHEST,
             border_radius=12,
             on_click=lambda e, ent=entry: self._view_entry(ent),
         )
     
     def _build_stat_chip(self, text: str, color: str) -> ft.Control:
         return ft.Container(
-            content=ft.Text(text, size=12, weight=ft.FontWeight.BOLD, color=color),
+            content=ft.Text(text, size=12, weight=ft.FontWeight.BOLD, color=colors.WHITE),
             padding=ft.Padding(12, 6, 12, 6),
-            bgcolor=ft.Colors.with_opacity(0.1, color),
+            bgcolor=color,
             border_radius=16,
         )
     
     def _build_type_chip(self, entry_type: Optional[JournalEntryType], label: str) -> ft.Control:
+        is_selected = self.filter_type == entry_type
         return ft.Container(
-            content=ft.Text(label, size=12),
+            content=ft.Text(
+                label, 
+                size=12,
+                weight=ft.FontWeight.BOLD if is_selected else None,
+                color=colors.WHITE if is_selected else None,
+            ),
             padding=ft.Padding(12, 6, 12, 6),
-            bgcolor=ft.Colors.SURFACE_CONTAINER_HIGHEST,
+            bgcolor=colors.PRIMARY if is_selected else colors.SURFACE_CONTAINER_HIGHEST,
             border_radius=16,
+            on_click=lambda e, t=entry_type: self._filter_entries(t),
         )
+    
+    def _filter_entries(self, entry_type: Optional[JournalEntryType]):
+        """Filter entries by type."""
+        self.filter_type = entry_type
+        self._refresh_view()
     
     def _build_type_selector_chip(self, entry_type: JournalEntryType, label: str) -> ft.Control:
         is_selected = self.selected_type == entry_type
@@ -738,10 +802,10 @@ class JournalView(ft.Container):
                 label,
                 size=13,
                 weight=ft.FontWeight.BOLD if is_selected else None,
-                color=ft.Colors.ON_PRIMARY if is_selected else None,
+                color=colors.ON_PRIMARY if is_selected else None,
             ),
             padding=ft.Padding(12, 8, 12, 8),
-            bgcolor=ft.Colors.PRIMARY if is_selected else ft.Colors.SURFACE_CONTAINER_HIGHEST,
+            bgcolor=colors.PRIMARY if is_selected else colors.SURFACE_CONTAINER_HIGHEST,
             border_radius=20,
             on_click=lambda e, t=entry_type: self._select_type(t),
         )
@@ -751,7 +815,7 @@ class JournalView(ft.Container):
         return ft.Container(
             content=ft.Text(emoji, size=28),
             padding=ft.Padding(12, 8, 12, 8),
-            bgcolor=ft.Colors.PRIMARY if is_selected else ft.Colors.SURFACE_CONTAINER_HIGHEST,
+            bgcolor=colors.PRIMARY if is_selected else colors.SURFACE_CONTAINER_HIGHEST,
             border_radius=12,
             on_click=lambda e, m=mood: self._select_mood(m),
         )
@@ -761,7 +825,7 @@ class JournalView(ft.Container):
         return ft.Container(
             content=ft.Text(emoji, size=28),
             padding=ft.Padding(12, 8, 12, 8),
-            bgcolor=ft.Colors.PRIMARY if is_selected else ft.Colors.SURFACE_CONTAINER_HIGHEST,
+            bgcolor=colors.PRIMARY if is_selected else colors.SURFACE_CONTAINER_HIGHEST,
             border_radius=12,
             on_click=lambda e, m=mood: self._select_mood_after(m),
         )

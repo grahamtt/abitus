@@ -1,6 +1,8 @@
 """Achievement badge component for displaying achievements."""
 
 import flet as ft
+
+from utils.compat import colors
 from models.achievement import Achievement
 
 
@@ -38,13 +40,13 @@ class AchievementBadge(ft.Container):
     
     def _get_background(self) -> str:
         if self.achievement.is_unlocked:
-            return ft.Colors.with_opacity(0.15, self.achievement.rarity_color)
-        return ft.Colors.with_opacity(0.05, ft.Colors.ON_SURFACE)
+            return colors.with_opacity(0.15, self.achievement.rarity_color)
+        return colors.with_opacity(0.05, colors.ON_SURFACE)
     
     def _get_border_color(self) -> str:
         if self.achievement.is_unlocked:
-            return ft.Colors.with_opacity(0.5, self.achievement.rarity_color)
-        return ft.Colors.with_opacity(0.2, ft.Colors.ON_SURFACE)
+            return colors.with_opacity(0.5, self.achievement.rarity_color)
+        return colors.with_opacity(0.2, colors.ON_SURFACE)
     
     def _build_content(self) -> ft.Control:
         achievement = self.achievement
@@ -80,7 +82,7 @@ class AchievementBadge(ft.Container):
                     content=ft.Text(
                         achievement.rarity_name,
                         size=10,
-                        color=ft.Colors.WHITE,
+                        color=colors.WHITE,
                     ),
                     bgcolor=achievement.rarity_color,
                     padding=ft.Padding(left=8, right=8, top=2, bottom=2),
@@ -127,7 +129,7 @@ class AchievementBadge(ft.Container):
                     shadow=ft.BoxShadow(
                         spread_radius=4,
                         blur_radius=16,
-                        color=ft.Colors.with_opacity(0.4, achievement.rarity_color),
+                        color=colors.with_opacity(0.4, achievement.rarity_color),
                     ) if achievement.is_unlocked else None,
                 ),
                 # Name
@@ -141,7 +143,7 @@ class AchievementBadge(ft.Container):
                 ft.Text(
                     achievement.description if achievement.is_unlocked or not achievement.is_hidden else "Complete hidden requirements",
                     size=12,
-                    color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                    color=colors.with_opacity(0.7, colors.ON_SURFACE),
                     text_align=ft.TextAlign.CENTER,
                     max_lines=2,
                 ),
@@ -154,7 +156,7 @@ class AchievementBadge(ft.Container):
                             content=ft.Text(
                                 achievement.rarity_name,
                                 size=11,
-                                color=ft.Colors.WHITE,
+                                color=colors.WHITE,
                             ),
                             bgcolor=achievement.rarity_color,
                             padding=ft.Padding(left=10, right=10, top=3, bottom=3),
@@ -163,7 +165,7 @@ class AchievementBadge(ft.Container):
                         ft.Text(
                             achievement.unlocked_at.strftime("%b %d, %Y") if achievement.unlocked_at else "",
                             size=11,
-                            color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.5, colors.ON_SURFACE),
                         ) if achievement.is_unlocked else ft.Container(),
                     ],
                 ) if achievement.is_unlocked else ft.Container(),
@@ -176,7 +178,7 @@ class AchievementBadge(ft.Container):
                             content=ft.Stack(
                                 controls=[
                                     ft.Container(
-                                        bgcolor=ft.Colors.with_opacity(0.2, ft.Colors.ON_SURFACE),
+                                        bgcolor=colors.with_opacity(0.2, colors.ON_SURFACE),
                                         border_radius=4,
                                         height=6,
                                         width=120,
@@ -196,7 +198,7 @@ class AchievementBadge(ft.Container):
                         ft.Text(
                             f"{achievement.progress}/{achievement.requirement_value}",
                             size=11,
-                            color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.5, colors.ON_SURFACE),
                         ),
                     ],
                 ) if not achievement.is_unlocked and achievement.requirement_value > 0 else ft.Container(),
@@ -214,12 +216,12 @@ class AchievementNotification(ft.Container):
             content=self._build_content(),
             padding=ft.Padding(20, 20, 20, 20),
             border_radius=16,
-            bgcolor=ft.Colors.SURFACE_CONTAINER_HIGHEST,
+            bgcolor=colors.SURFACE_CONTAINER_HIGHEST,
             border=ft.border.all(2, achievement.rarity_color),
             shadow=ft.BoxShadow(
                 spread_radius=0,
                 blur_radius=20,
-                color=ft.Colors.with_opacity(0.3, achievement.rarity_color),
+                color=colors.with_opacity(0.3, achievement.rarity_color),
                 offset=ft.Offset(0, 4),
             ),
             on_click=on_dismiss,
@@ -249,14 +251,14 @@ class AchievementNotification(ft.Container):
                 ft.Text(
                     achievement.description,
                     size=13,
-                    color=ft.Colors.with_opacity(0.7, ft.Colors.ON_SURFACE),
+                    color=colors.with_opacity(0.7, colors.ON_SURFACE),
                     text_align=ft.TextAlign.CENTER,
                 ),
                 ft.Container(
                     content=ft.Text(
                         achievement.rarity_name,
                         size=12,
-                        color=ft.Colors.WHITE,
+                        color=colors.WHITE,
                         weight=ft.FontWeight.W_500,
                     ),
                     bgcolor=achievement.rarity_color,

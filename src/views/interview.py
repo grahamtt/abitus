@@ -3,6 +3,7 @@
 import flet as ft
 from typing import Callable, Optional
 
+from utils.compat import colors, icons
 from models.character import Character
 from models.stats import StatType, STAT_DEFINITIONS
 from services.interview import InterviewService, InterviewSession
@@ -26,7 +27,7 @@ class InterviewView(ft.Container):
         # References for updating without full rebuild
         self._answer_containers: list[ft.Container] = []
         self._answer_icons: list[ft.Icon] = []
-        self._continue_button: Optional[ft.FilledButton] = None
+        self._continue_button: Optional[ft.ElevatedButton] = None
         
         super().__init__(
             content=self._build_content(),
@@ -125,7 +126,7 @@ class InterviewView(ft.Container):
                             size=16,
                             italic=True,
                             text_align=ft.TextAlign.CENTER,
-                            color=ft.Colors.with_opacity(0.8, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.8, colors.ON_SURFACE),
                         ),
                         padding=ft.Padding(left=32, right=32, top=0, bottom=0),
                     ),
@@ -136,24 +137,24 @@ class InterviewView(ft.Container):
                     ft.Text(
                         f"{len(category.questions)} questions",
                         size=14,
-                        color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.5, colors.ON_SURFACE),
                     ),
                     
                     ft.Container(expand=True),
                     
                     # Continue button
                     ft.Container(
-                        content=ft.FilledButton(
+                        content=ft.ElevatedButton(
                             content=ft.Row(
                                 spacing=8,
                                 alignment=ft.MainAxisAlignment.CENTER,
                                 controls=[
                                     ft.Text("Begin", weight=ft.FontWeight.W_500),
-                                    ft.Icon(ft.Icons.ARROW_FORWARD, size=18),
+                                    ft.Icon(icons.ARROW_FORWARD, size=18),
                                 ],
                             ),
                             bgcolor="#6366f1",
-                            color=ft.Colors.WHITE,
+                            color=colors.WHITE,
                             width=200,
                             on_click=lambda e: self._start_category(),
                         ),
@@ -166,8 +167,8 @@ class InterviewView(ft.Container):
                 begin=ft.Alignment(0, -1),
                 end=ft.Alignment(0, 1),
                 colors=[
-                    ft.Colors.with_opacity(0.08, "#6366f1"),
-                    ft.Colors.TRANSPARENT,
+                    colors.with_opacity(0.08, "#6366f1"),
+                    colors.TRANSPARENT,
                 ],
             ),
         )
@@ -193,7 +194,7 @@ class InterviewView(ft.Container):
             self._answer_icons.append(icon)
         
         # Build continue button with reference
-        self._continue_button = ft.FilledButton(
+        self._continue_button = ft.ElevatedButton(
             content=ft.Row(
                 spacing=6,
                 controls=[
@@ -201,11 +202,11 @@ class InterviewView(ft.Container):
                         "Continue" if self.selected_answers else "Skip",
                         weight=ft.FontWeight.W_500,
                     ),
-                    ft.Icon(ft.Icons.ARROW_FORWARD, size=18),
+                    ft.Icon(icons.ARROW_FORWARD, size=18),
                 ],
             ),
-            bgcolor="#6366f1" if self.selected_answers else ft.Colors.with_opacity(0.3, "#6366f1"),
-            color=ft.Colors.WHITE,
+            bgcolor="#6366f1" if self.selected_answers else colors.with_opacity(0.3, "#6366f1"),
+            color=colors.WHITE,
             on_click=lambda e: self._submit_answer(),
         )
         
@@ -243,7 +244,7 @@ class InterviewView(ft.Container):
                         content=ft.Text(
                             "Select all that apply" if question.multiple_select else "Choose one",
                             size=12,
-                            color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.5, colors.ON_SURFACE),
                         ),
                         padding=ft.Padding(left=24, right=24, top=0, bottom=8),
                     ),
@@ -269,7 +270,7 @@ class InterviewView(ft.Container):
                                     content=ft.Row(
                                         spacing=4,
                                         controls=[
-                                            ft.Icon(ft.Icons.ARROW_BACK, size=18),
+                                            ft.Icon(icons.ARROW_BACK, size=18),
                                             ft.Text("Back"),
                                         ],
                                     ),
@@ -291,11 +292,11 @@ class InterviewView(ft.Container):
         
         # Create icon with reference for later updates
         icon = ft.Icon(
-            ft.Icons.CHECK_BOX if is_selected and multiple_select
-            else ft.Icons.CHECK_BOX_OUTLINE_BLANK if multiple_select
-            else ft.Icons.RADIO_BUTTON_CHECKED if is_selected
-            else ft.Icons.RADIO_BUTTON_UNCHECKED,
-            color="#6366f1" if is_selected else ft.Colors.with_opacity(0.4, ft.Colors.ON_SURFACE),
+            icons.CHECK_BOX if is_selected and multiple_select
+            else icons.CHECK_BOX_OUTLINE_BLANK if multiple_select
+            else icons.RADIO_BUTTON_CHECKED if is_selected
+            else icons.RADIO_BUTTON_UNCHECKED,
+            color="#6366f1" if is_selected else colors.with_opacity(0.4, colors.ON_SURFACE),
             size=22,
         )
         
@@ -310,8 +311,8 @@ class InterviewView(ft.Container):
                         content=ft.Text(
                             answer.text,
                             size=15,
-                            color=ft.Colors.ON_SURFACE if is_selected 
-                                  else ft.Colors.with_opacity(0.8, ft.Colors.ON_SURFACE),
+                            color=colors.ON_SURFACE if is_selected 
+                                  else colors.with_opacity(0.8, colors.ON_SURFACE),
                         ),
                         expand=True,
                     ),
@@ -319,10 +320,10 @@ class InterviewView(ft.Container):
             ),
             padding=ft.Padding(16, 14, 16, 14),
             border_radius=12,
-            bgcolor=ft.Colors.with_opacity(0.1, "#6366f1") if is_selected 
-                    else ft.Colors.SURFACE_CONTAINER_HIGH,
+            bgcolor=colors.with_opacity(0.1, "#6366f1") if is_selected 
+                    else colors.SURFACE_CONTAINER_HIGH,
             border=ft.border.all(2, "#6366f1") if is_selected 
-                   else ft.border.all(1, ft.Colors.with_opacity(0.1, ft.Colors.ON_SURFACE)),
+                   else ft.border.all(1, colors.with_opacity(0.1, colors.ON_SURFACE)),
             on_click=lambda e, idx=index: self._toggle_answer(idx, multiple_select),
             ink=True,
         )
@@ -343,19 +344,19 @@ class InterviewView(ft.Container):
                             ft.Text(
                                 f"Question {self.session.questions_answered + 1}" if self.session else "",
                                 size=12,
-                                color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                                color=colors.with_opacity(0.5, colors.ON_SURFACE),
                             ),
                             ft.Text(
                                 f"{int(progress * 100)}%",
                                 size=12,
-                                color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                                color=colors.with_opacity(0.5, colors.ON_SURFACE),
                             ),
                         ],
                     ),
                     ft.ProgressBar(
                         value=progress,
                         color="#6366f1",
-                        bgcolor=ft.Colors.with_opacity(0.1, "#6366f1"),
+                        bgcolor=colors.with_opacity(0.1, "#6366f1"),
                         height=4,
                     ),
                 ],
@@ -400,7 +401,7 @@ class InterviewView(ft.Container):
                                                 ft.Text(
                                                     f"Strongest: {strongest_name}",
                                                     size=11,
-                                                    color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                                                    color=colors.with_opacity(0.5, colors.ON_SURFACE),
                                                 ),
                                             ],
                                         ),
@@ -413,14 +414,14 @@ class InterviewView(ft.Container):
                                         weight=ft.FontWeight.BOLD,
                                         color=definition.color,
                                     ),
-                                    bgcolor=ft.Colors.with_opacity(0.15, definition.color),
+                                    bgcolor=colors.with_opacity(0.15, definition.color),
                                     padding=ft.Padding(left=12, right=12, top=4, bottom=4),
                                     border_radius=12,
                                 ),
                             ],
                         ),
                         padding=ft.Padding(12, 10, 12, 10),
-                        bgcolor=ft.Colors.with_opacity(0.03, definition.color),
+                        bgcolor=colors.with_opacity(0.03, definition.color),
                         border_radius=10,
                     )
                 )
@@ -450,7 +451,7 @@ class InterviewView(ft.Container):
                     ft.Text(
                         "Your character has been forged",
                         size=14,
-                        color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                        color=colors.with_opacity(0.6, colors.ON_SURFACE),
                     ),
                     
                     ft.Container(height=24),
@@ -482,17 +483,17 @@ class InterviewView(ft.Container):
                     
                     # Start button
                     ft.Container(
-                        content=ft.FilledButton(
+                        content=ft.ElevatedButton(
                             content=ft.Row(
                                 spacing=8,
                                 alignment=ft.MainAxisAlignment.CENTER,
                                 controls=[
                                     ft.Text("Begin Your Adventure!", weight=ft.FontWeight.W_600),
-                                    ft.Icon(ft.Icons.ROCKET_LAUNCH, size=20),
+                                    ft.Icon(icons.ROCKET_LAUNCH, size=20),
                                 ],
                             ),
                             bgcolor="#6366f1",
-                            color=ft.Colors.WHITE,
+                            color=colors.WHITE,
                             width=280,
                             height=50,
                             on_click=lambda e: self._finish(),
@@ -506,8 +507,8 @@ class InterviewView(ft.Container):
                 begin=ft.Alignment(0, -1),
                 end=ft.Alignment(0, 1),
                 colors=[
-                    ft.Colors.with_opacity(0.05, "#10b981"),
-                    ft.Colors.TRANSPARENT,
+                    colors.with_opacity(0.05, "#10b981"),
+                    colors.TRANSPARENT,
                 ],
             ),
         )
@@ -540,19 +541,19 @@ class InterviewView(ft.Container):
             if is_selected != was_selected:
                 # Update icon
                 if multiple_select:
-                    icon.name = ft.Icons.CHECK_BOX if is_selected else ft.Icons.CHECK_BOX_OUTLINE_BLANK
+                    icon.name = icons.CHECK_BOX if is_selected else icons.CHECK_BOX_OUTLINE_BLANK
                 else:
-                    icon.name = ft.Icons.RADIO_BUTTON_CHECKED if is_selected else ft.Icons.RADIO_BUTTON_UNCHECKED
-                icon.color = "#6366f1" if is_selected else ft.Colors.with_opacity(0.4, ft.Colors.ON_SURFACE)
+                    icon.name = icons.RADIO_BUTTON_CHECKED if is_selected else icons.RADIO_BUTTON_UNCHECKED
+                icon.color = "#6366f1" if is_selected else colors.with_opacity(0.4, colors.ON_SURFACE)
                 
                 # Update container styling
-                container.bgcolor = ft.Colors.with_opacity(0.1, "#6366f1") if is_selected else ft.Colors.SURFACE_CONTAINER_HIGH
-                container.border = ft.border.all(2, "#6366f1") if is_selected else ft.border.all(1, ft.Colors.with_opacity(0.1, ft.Colors.ON_SURFACE))
+                container.bgcolor = colors.with_opacity(0.1, "#6366f1") if is_selected else colors.SURFACE_CONTAINER_HIGH
+                container.border = ft.border.all(2, "#6366f1") if is_selected else ft.border.all(1, colors.with_opacity(0.1, colors.ON_SURFACE))
         
         # Update continue button
         if self._continue_button:
             has_selection = len(self.selected_answers) > 0
-            self._continue_button.bgcolor = "#6366f1" if has_selection else ft.Colors.with_opacity(0.3, "#6366f1")
+            self._continue_button.bgcolor = "#6366f1" if has_selection else colors.with_opacity(0.3, "#6366f1")
             # Update button text
             if self._continue_button.content and hasattr(self._continue_button.content, 'controls'):
                 text_control = self._continue_button.content.controls[0]

@@ -1,6 +1,8 @@
 """Quest card component for displaying quest information."""
 
 import flet as ft
+
+from utils.compat import colors, icons
 from models.quest import Quest, QuestType, QuestStatus
 from models.stats import STAT_DEFINITIONS
 
@@ -33,12 +35,12 @@ class QuestCard(ft.Container):
             content=self._build_content(),
             padding=ft.Padding(16, 16, 16, 16),
             border_radius=16,
-            bgcolor=ft.Colors.SURFACE_CONTAINER_HIGHEST,
-            border=ft.border.all(1, ft.Colors.with_opacity(0.15, self.stat_def.color)),
+            bgcolor=colors.SURFACE_CONTAINER_HIGHEST,
+            border=ft.border.all(1, colors.with_opacity(0.15, self.stat_def.color)),
             shadow=ft.BoxShadow(
                 spread_radius=0,
                 blur_radius=8,
-                color=ft.Colors.with_opacity(0.1, ft.Colors.BLACK),
+                color=colors.with_opacity(0.1, colors.BLACK),
                 offset=ft.Offset(0, 2),
             ),
             animate=ft.Animation(200, ft.AnimationCurve.EASE_OUT),
@@ -77,7 +79,7 @@ class QuestCard(ft.Container):
                                 # Quest type icon
                                 ft.Container(
                                     content=ft.Text(quest.type_icon, size=20),
-                                    bgcolor=ft.Colors.with_opacity(0.15, self.stat_def.color),
+                                    bgcolor=colors.with_opacity(0.15, self.stat_def.color),
                                     padding=ft.Padding(8, 8, 8, 8),
                                     border_radius=10,
                                 ),
@@ -95,7 +97,7 @@ class QuestCard(ft.Container):
                                         ft.Text(
                                             f"{quest.quest_type.value.title()} Quest",
                                             size=12,
-                                            color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                                            color=colors.with_opacity(0.6, colors.ON_SURFACE),
                                         ),
                                     ],
                                 ),
@@ -107,7 +109,7 @@ class QuestCard(ft.Container):
                                 status_text[quest.status],
                                 size=11,
                                 weight=ft.FontWeight.W_500,
-                                color=ft.Colors.WHITE,
+                                color=colors.WHITE,
                             ),
                             bgcolor=status_colors[quest.status],
                             padding=ft.Padding(left=10, right=10, top=4, bottom=4),
@@ -120,19 +122,20 @@ class QuestCard(ft.Container):
                 ft.Text(
                     quest.description,
                     size=14,
-                    color=ft.Colors.with_opacity(0.8, ft.Colors.ON_SURFACE),
+                    color=colors.with_opacity(0.8, colors.ON_SURFACE),
                 ),
                 
                 # Stats row
                 ft.Row(
                     alignment=ft.MainAxisAlignment.START,
                     spacing=16,
+                    wrap=True,
                     controls=[
                         # XP reward
                         ft.Row(
                             spacing=4,
                             controls=[
-                                ft.Icon(ft.Icons.STAR, size=16, color="#f59e0b"),
+                                ft.Icon(icons.STAR, size=16, color="#f59e0b"),
                                 ft.Text(
                                     f"+{quest.xp_reward} XP",
                                     size=13,
@@ -157,11 +160,11 @@ class QuestCard(ft.Container):
                         ft.Row(
                             spacing=4,
                             controls=[
-                                ft.Icon(ft.Icons.TIMER, size=14, color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE)),
+                                ft.Icon(icons.TIMER, size=14, color=colors.with_opacity(0.6, colors.ON_SURFACE)),
                                 ft.Text(
                                     f"{quest.duration_minutes} min",
                                     size=13,
-                                    color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                                    color=colors.with_opacity(0.6, colors.ON_SURFACE),
                                 ),
                             ],
                         ) if quest.duration_minutes > 0 else ft.Container(),
@@ -171,6 +174,24 @@ class QuestCard(ft.Container):
                             size=12,
                             color="#f59e0b",
                         ),
+                        # Weekly progress for custom quests
+                        ft.Container(
+                            content=ft.Row(
+                                spacing=4,
+                                controls=[
+                                    ft.Icon(icons.REPEAT, size=14, color="#a855f7"),
+                                    ft.Text(
+                                        quest.weekly_progress_display,
+                                        size=12,
+                                        weight=ft.FontWeight.W_500,
+                                        color="#a855f7",
+                                    ),
+                                ],
+                            ),
+                            bgcolor=colors.with_opacity(0.15, "#a855f7"),
+                            padding=ft.Padding(8, 4, 8, 4),
+                            border_radius=8,
+                        ) if getattr(quest, 'is_custom', False) and getattr(quest, 'weekly_target', 0) > 0 else ft.Container(),
                     ],
                 ),
                 
@@ -196,7 +217,7 @@ class QuestCard(ft.Container):
                         ft.Text(
                             "Progress",
                             size=12,
-                            color=ft.Colors.with_opacity(0.6, ft.Colors.ON_SURFACE),
+                            color=colors.with_opacity(0.6, colors.ON_SURFACE),
                         ),
                         ft.Text(
                             quest.progress_display,
@@ -212,7 +233,7 @@ class QuestCard(ft.Container):
                             # Background track
                             ft.Container(
                                 height=8,
-                                bgcolor=ft.Colors.with_opacity(0.15, self.stat_def.color),
+                                bgcolor=colors.with_opacity(0.15, self.stat_def.color),
                                 border_radius=4,
                                 expand=True,
                             ),
@@ -233,7 +254,7 @@ class QuestCard(ft.Container):
                 ft.Text(
                     f"{percentage:.0f}% complete",
                     size=11,
-                    color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                    color=colors.with_opacity(0.5, colors.ON_SURFACE),
                     text_align=ft.TextAlign.CENTER,
                 ),
             ],
@@ -247,16 +268,16 @@ class QuestCard(ft.Container):
             return ft.Row(
                 alignment=ft.MainAxisAlignment.END,
                 controls=[
-                    ft.FilledButton(
+                    ft.ElevatedButton(
                         content=ft.Row(
                             spacing=6,
                             controls=[
-                                ft.Icon(ft.Icons.PLAY_ARROW, size=18),
+                                ft.Icon(icons.PLAY_ARROW, size=18),
                                 ft.Text("Accept Quest", weight=ft.FontWeight.W_500),
                             ],
                         ),
                         bgcolor=self.stat_def.color,
-                        color=ft.Colors.WHITE,
+                        color=colors.WHITE,
                         on_click=self._on_accept,
                     ),
                 ],
@@ -265,7 +286,7 @@ class QuestCard(ft.Container):
         elif quest.status == QuestStatus.ACTIVE:
             buttons = [
                 ft.TextButton(
-                    content=ft.Text("Abandon", color=ft.Colors.ERROR),
+                    content=ft.Text("Abandon", color=colors.ERROR),
                     on_click=self._on_abandon,
                 ),
             ]
@@ -273,16 +294,16 @@ class QuestCard(ft.Container):
             # Add "Write Entry" button for journal-satisfiable quests
             if quest.requires_journal and self._on_write_entry:
                 buttons.append(
-                    ft.FilledButton(
+                    ft.ElevatedButton(
                         content=ft.Row(
                             spacing=6,
                             controls=[
-                                ft.Icon(ft.Icons.EDIT_NOTE, size=18),
+                                ft.Icon(icons.EDIT_NOTE, size=18),
                                 ft.Text("Write Entry", weight=ft.FontWeight.W_500),
                             ],
                         ),
                         bgcolor="#6366f1",
-                        color=ft.Colors.WHITE,
+                        color=colors.WHITE,
                         on_click=self._on_write_entry,
                     ),
                 )
@@ -290,16 +311,16 @@ class QuestCard(ft.Container):
             # Add "Log Progress" button for progress-trackable quests
             if quest.progress_trackable and self._on_log_progress:
                 buttons.append(
-                    ft.FilledButton(
+                    ft.ElevatedButton(
                         content=ft.Row(
                             spacing=6,
                             controls=[
-                                ft.Icon(ft.Icons.ADD_CIRCLE_OUTLINE, size=18),
+                                ft.Icon(icons.ADD_CIRCLE_OUTLINE, size=18),
                                 ft.Text("Log Progress", weight=ft.FontWeight.W_500),
                             ],
                         ),
                         bgcolor=self.stat_def.color,
-                        color=ft.Colors.WHITE,
+                        color=colors.WHITE,
                         on_click=self._on_log_progress,
                     ),
                 )
@@ -307,16 +328,16 @@ class QuestCard(ft.Container):
             # Only show Complete button if not progress-trackable OR progress is complete
             if not quest.progress_trackable or quest.is_progress_complete:
                 buttons.append(
-                    ft.FilledButton(
+                    ft.ElevatedButton(
                         content=ft.Row(
                             spacing=6,
                             controls=[
-                                ft.Icon(ft.Icons.CHECK, size=18),
+                                ft.Icon(icons.CHECK, size=18),
                                 ft.Text("Complete", weight=ft.FontWeight.W_500),
                             ],
                         ),
                         bgcolor="#22c55e",
-                        color=ft.Colors.WHITE,
+                        color=colors.WHITE,
                         on_click=self._on_complete,
                     ),
                 )
@@ -334,7 +355,7 @@ class QuestCard(ft.Container):
                     ft.Row(
                         spacing=6,
                         controls=[
-                            ft.Icon(ft.Icons.CHECK_CIRCLE, size=18, color="#22c55e"),
+                            ft.Icon(icons.CHECK_CIRCLE, size=18, color="#22c55e"),
                             ft.Text(
                                 "Quest Completed!",
                                 color="#22c55e",
@@ -359,7 +380,7 @@ class QuestListItem(ft.Container):
             content=self._build_content(),
             padding=ft.Padding(left=12, right=12, top=10, bottom=10),
             border_radius=10,
-            bgcolor=ft.Colors.with_opacity(0.05, self.stat_def.color),
+            bgcolor=colors.with_opacity(0.05, self.stat_def.color),
             on_click=on_click,
             ink=True,
         )
@@ -401,9 +422,9 @@ class QuestListItem(ft.Container):
                     ],
                 ),
                 ft.Icon(
-                    ft.Icons.CHEVRON_RIGHT,
+                    icons.CHEVRON_RIGHT,
                     size=20,
-                    color=ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE),
+                    color=colors.with_opacity(0.5, colors.ON_SURFACE),
                 ),
             ],
         )
